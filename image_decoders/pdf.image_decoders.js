@@ -165,8 +165,8 @@ var _jpg = __w_pdfjs_require__(136);
 
 var _jpx = __w_pdfjs_require__(137);
 
-var pdfjsVersion = '2.2.228';
-var pdfjsBuild = 'd7afb74a';
+var pdfjsVersion = '2.3.158';
+var pdfjsBuild = 'f9ac716e';
 
 /***/ }),
 /* 1 */
@@ -222,13 +222,19 @@ Object.defineProperty(exports, "URL", {
     return _url_polyfill.URL;
   }
 });
-exports.createObjectURL = exports.FormatError = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.NativeImageDecoding = exports.MissingPDFException = exports.InvalidPDFException = exports.AbortException = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.UNSUPPORTED_FEATURES = exports.VerbosityLevel = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = void 0;
+exports.createObjectURL = exports.FormatError = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.NativeImageDecoding = exports.MissingPDFException = exports.InvalidPDFException = exports.AbortException = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.UNSUPPORTED_FEATURES = exports.VerbosityLevel = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = void 0;
 
 __w_pdfjs_require__(2);
 
 var _streams_polyfill = __w_pdfjs_require__(131);
 
 var _url_polyfill = __w_pdfjs_require__(132);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -301,6 +307,29 @@ var AnnotationType = {
   REDACT: 26
 };
 exports.AnnotationType = AnnotationType;
+var AnnotationStateModelType = {
+  MARKED: 'Marked',
+  REVIEW: 'Review'
+};
+exports.AnnotationStateModelType = AnnotationStateModelType;
+var AnnotationMarkedState = {
+  MARKED: 'Marked',
+  UNMARKED: 'Unmarked'
+};
+exports.AnnotationMarkedState = AnnotationMarkedState;
+var AnnotationReviewState = {
+  ACCEPTED: 'Accepted',
+  REJECTED: 'Rejected',
+  CANCELLED: 'Cancelled',
+  COMPLETED: 'Completed',
+  NONE: 'None'
+};
+exports.AnnotationReviewState = AnnotationReviewState;
+var AnnotationReplyType = {
+  GROUP: 'Group',
+  REPLY: 'R'
+};
+exports.AnnotationReplyType = AnnotationReplyType;
 var AnnotationFlag = {
   INVISIBLE: 0x01,
   HIDDEN: 0x02,
@@ -345,30 +374,30 @@ var AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 var StreamType = {
-  UNKNOWN: 0,
-  FLATE: 1,
-  LZW: 2,
-  DCT: 3,
-  JPX: 4,
-  JBIG: 5,
-  A85: 6,
-  AHX: 7,
-  CCF: 8,
-  RL: 9
+  UNKNOWN: 'UNKNOWN',
+  FLATE: 'FLATE',
+  LZW: 'LZW',
+  DCT: 'DCT',
+  JPX: 'JPX',
+  JBIG: 'JBIG',
+  A85: 'A85',
+  AHX: 'AHX',
+  CCF: 'CCF',
+  RLX: 'RLX'
 };
 exports.StreamType = StreamType;
 var FontType = {
-  UNKNOWN: 0,
-  TYPE1: 1,
-  TYPE1C: 2,
-  CIDFONTTYPE0: 3,
-  CIDFONTTYPE0C: 4,
-  TRUETYPE: 5,
-  CIDFONTTYPE2: 6,
-  TYPE3: 7,
-  OPENTYPE: 8,
-  TYPE0: 9,
-  MMTYPE1: 10
+  UNKNOWN: 'UNKNOWN',
+  TYPE1: 'TYPE1',
+  TYPE1C: 'TYPE1C',
+  CIDFONTTYPE0: 'CIDFONTTYPE0',
+  CIDFONTTYPE0C: 'CIDFONTTYPE0C',
+  TRUETYPE: 'TRUETYPE',
+  CIDFONTTYPE2: 'CIDFONTTYPE2',
+  TYPE3: 'TYPE3',
+  OPENTYPE: 'OPENTYPE',
+  TYPE0: 'TYPE0',
+  MMTYPE1: 'MMTYPE1'
 };
 exports.FontType = FontType;
 var VerbosityLevel = {
@@ -505,13 +534,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log('Info: ' + msg);
+    console.log("Info: ".concat(msg));
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log('Warning: ' + msg);
+    console.log("Warning: ".concat(msg));
   }
 }
 
@@ -526,8 +555,10 @@ function assert(cond, msg) {
 }
 
 function isSameOrigin(baseUrl, otherUrl) {
+  var base;
+
   try {
-    var base = new _url_polyfill.URL(baseUrl);
+    base = new _url_polyfill.URL(baseUrl);
 
     if (!base.origin || base.origin === 'null') {
       return false;
@@ -730,26 +761,23 @@ function arrayByteLength(arr) {
 }
 
 function arraysToBytes(arr) {
-  if (arr.length === 1 && arr[0] instanceof Uint8Array) {
+  var length = arr.length;
+
+  if (length === 1 && arr[0] instanceof Uint8Array) {
     return arr[0];
   }
 
   var resultLength = 0;
-  var i,
-      ii = arr.length;
-  var item, itemLength;
 
-  for (i = 0; i < ii; i++) {
-    item = arr[i];
-    itemLength = arrayByteLength(item);
-    resultLength += itemLength;
+  for (var i = 0; i < length; i++) {
+    resultLength += arrayByteLength(arr[i]);
   }
 
   var pos = 0;
   var data = new Uint8Array(resultLength);
 
-  for (i = 0; i < ii; i++) {
-    item = arr[i];
+  for (var _i = 0; _i < length; _i++) {
+    var item = arr[_i];
 
     if (!(item instanceof Uint8Array)) {
       if (typeof item === 'string') {
@@ -759,7 +787,7 @@ function arraysToBytes(arr) {
       }
     }
 
-    itemLength = item.byteLength;
+    var itemLength = item.byteLength;
     data.set(item, pos);
     pos += itemLength;
   }
@@ -807,108 +835,124 @@ function isEvalSupported() {
   }
 }
 
-var Util = function UtilClosure() {
-  function Util() {}
+var rgbBuf = ['rgb(', 0, ',', 0, ',', 0, ')'];
 
-  var rgbBuf = ['rgb(', 0, ',', 0, ',', 0, ')'];
+var Util =
+/*#__PURE__*/
+function () {
+  function Util() {
+    _classCallCheck(this, Util);
+  }
 
-  Util.makeCssRgb = function Util_makeCssRgb(r, g, b) {
-    rgbBuf[1] = r;
-    rgbBuf[3] = g;
-    rgbBuf[5] = b;
-    return rgbBuf.join('');
-  };
-
-  Util.transform = function Util_transform(m1, m2) {
-    return [m1[0] * m2[0] + m1[2] * m2[1], m1[1] * m2[0] + m1[3] * m2[1], m1[0] * m2[2] + m1[2] * m2[3], m1[1] * m2[2] + m1[3] * m2[3], m1[0] * m2[4] + m1[2] * m2[5] + m1[4], m1[1] * m2[4] + m1[3] * m2[5] + m1[5]];
-  };
-
-  Util.applyTransform = function Util_applyTransform(p, m) {
-    var xt = p[0] * m[0] + p[1] * m[2] + m[4];
-    var yt = p[0] * m[1] + p[1] * m[3] + m[5];
-    return [xt, yt];
-  };
-
-  Util.applyInverseTransform = function Util_applyInverseTransform(p, m) {
-    var d = m[0] * m[3] - m[1] * m[2];
-    var xt = (p[0] * m[3] - p[1] * m[2] + m[2] * m[5] - m[4] * m[3]) / d;
-    var yt = (-p[0] * m[1] + p[1] * m[0] + m[4] * m[1] - m[5] * m[0]) / d;
-    return [xt, yt];
-  };
-
-  Util.getAxialAlignedBoundingBox = function Util_getAxialAlignedBoundingBox(r, m) {
-    var p1 = Util.applyTransform(r, m);
-    var p2 = Util.applyTransform(r.slice(2, 4), m);
-    var p3 = Util.applyTransform([r[0], r[3]], m);
-    var p4 = Util.applyTransform([r[2], r[1]], m);
-    return [Math.min(p1[0], p2[0], p3[0], p4[0]), Math.min(p1[1], p2[1], p3[1], p4[1]), Math.max(p1[0], p2[0], p3[0], p4[0]), Math.max(p1[1], p2[1], p3[1], p4[1])];
-  };
-
-  Util.inverseTransform = function Util_inverseTransform(m) {
-    var d = m[0] * m[3] - m[1] * m[2];
-    return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d, (m[2] * m[5] - m[4] * m[3]) / d, (m[4] * m[1] - m[5] * m[0]) / d];
-  };
-
-  Util.apply3dTransform = function Util_apply3dTransform(m, v) {
-    return [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
-  };
-
-  Util.singularValueDecompose2dScale = function Util_singularValueDecompose2dScale(m) {
-    var transpose = [m[0], m[2], m[1], m[3]];
-    var a = m[0] * transpose[0] + m[1] * transpose[2];
-    var b = m[0] * transpose[1] + m[1] * transpose[3];
-    var c = m[2] * transpose[0] + m[3] * transpose[2];
-    var d = m[2] * transpose[1] + m[3] * transpose[3];
-    var first = (a + d) / 2;
-    var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
-    var sx = first + second || 1;
-    var sy = first - second || 1;
-    return [Math.sqrt(sx), Math.sqrt(sy)];
-  };
-
-  Util.normalizeRect = function Util_normalizeRect(rect) {
-    var r = rect.slice(0);
-
-    if (rect[0] > rect[2]) {
-      r[0] = rect[2];
-      r[2] = rect[0];
+  _createClass(Util, null, [{
+    key: "makeCssRgb",
+    value: function makeCssRgb(r, g, b) {
+      rgbBuf[1] = r;
+      rgbBuf[3] = g;
+      rgbBuf[5] = b;
+      return rgbBuf.join('');
     }
-
-    if (rect[1] > rect[3]) {
-      r[1] = rect[3];
-      r[3] = rect[1];
+  }, {
+    key: "transform",
+    value: function transform(m1, m2) {
+      return [m1[0] * m2[0] + m1[2] * m2[1], m1[1] * m2[0] + m1[3] * m2[1], m1[0] * m2[2] + m1[2] * m2[3], m1[1] * m2[2] + m1[3] * m2[3], m1[0] * m2[4] + m1[2] * m2[5] + m1[4], m1[1] * m2[4] + m1[3] * m2[5] + m1[5]];
     }
-
-    return r;
-  };
-
-  Util.intersect = function Util_intersect(rect1, rect2) {
-    function compare(a, b) {
-      return a - b;
+  }, {
+    key: "applyTransform",
+    value: function applyTransform(p, m) {
+      var xt = p[0] * m[0] + p[1] * m[2] + m[4];
+      var yt = p[0] * m[1] + p[1] * m[3] + m[5];
+      return [xt, yt];
     }
-
-    var orderedX = [rect1[0], rect1[2], rect2[0], rect2[2]].sort(compare),
-        orderedY = [rect1[1], rect1[3], rect2[1], rect2[3]].sort(compare),
-        result = [];
-    rect1 = Util.normalizeRect(rect1);
-    rect2 = Util.normalizeRect(rect2);
-
-    if (orderedX[0] === rect1[0] && orderedX[1] === rect2[0] || orderedX[0] === rect2[0] && orderedX[1] === rect1[0]) {
-      result[0] = orderedX[1];
-      result[2] = orderedX[2];
-    } else {
-      return false;
+  }, {
+    key: "applyInverseTransform",
+    value: function applyInverseTransform(p, m) {
+      var d = m[0] * m[3] - m[1] * m[2];
+      var xt = (p[0] * m[3] - p[1] * m[2] + m[2] * m[5] - m[4] * m[3]) / d;
+      var yt = (-p[0] * m[1] + p[1] * m[0] + m[4] * m[1] - m[5] * m[0]) / d;
+      return [xt, yt];
     }
-
-    if (orderedY[0] === rect1[1] && orderedY[1] === rect2[1] || orderedY[0] === rect2[1] && orderedY[1] === rect1[1]) {
-      result[1] = orderedY[1];
-      result[3] = orderedY[2];
-    } else {
-      return false;
+  }, {
+    key: "getAxialAlignedBoundingBox",
+    value: function getAxialAlignedBoundingBox(r, m) {
+      var p1 = Util.applyTransform(r, m);
+      var p2 = Util.applyTransform(r.slice(2, 4), m);
+      var p3 = Util.applyTransform([r[0], r[3]], m);
+      var p4 = Util.applyTransform([r[2], r[1]], m);
+      return [Math.min(p1[0], p2[0], p3[0], p4[0]), Math.min(p1[1], p2[1], p3[1], p4[1]), Math.max(p1[0], p2[0], p3[0], p4[0]), Math.max(p1[1], p2[1], p3[1], p4[1])];
     }
+  }, {
+    key: "inverseTransform",
+    value: function inverseTransform(m) {
+      var d = m[0] * m[3] - m[1] * m[2];
+      return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d, (m[2] * m[5] - m[4] * m[3]) / d, (m[4] * m[1] - m[5] * m[0]) / d];
+    }
+  }, {
+    key: "apply3dTransform",
+    value: function apply3dTransform(m, v) {
+      return [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
+    }
+  }, {
+    key: "singularValueDecompose2dScale",
+    value: function singularValueDecompose2dScale(m) {
+      var transpose = [m[0], m[2], m[1], m[3]];
+      var a = m[0] * transpose[0] + m[1] * transpose[2];
+      var b = m[0] * transpose[1] + m[1] * transpose[3];
+      var c = m[2] * transpose[0] + m[3] * transpose[2];
+      var d = m[2] * transpose[1] + m[3] * transpose[3];
+      var first = (a + d) / 2;
+      var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+      var sx = first + second || 1;
+      var sy = first - second || 1;
+      return [Math.sqrt(sx), Math.sqrt(sy)];
+    }
+  }, {
+    key: "normalizeRect",
+    value: function normalizeRect(rect) {
+      var r = rect.slice(0);
 
-    return result;
-  };
+      if (rect[0] > rect[2]) {
+        r[0] = rect[2];
+        r[2] = rect[0];
+      }
+
+      if (rect[1] > rect[3]) {
+        r[1] = rect[3];
+        r[3] = rect[1];
+      }
+
+      return r;
+    }
+  }, {
+    key: "intersect",
+    value: function intersect(rect1, rect2) {
+      function compare(a, b) {
+        return a - b;
+      }
+
+      var orderedX = [rect1[0], rect1[2], rect2[0], rect2[2]].sort(compare);
+      var orderedY = [rect1[1], rect1[3], rect2[1], rect2[3]].sort(compare);
+      var result = [];
+      rect1 = Util.normalizeRect(rect1);
+      rect2 = Util.normalizeRect(rect2);
+
+      if (orderedX[0] === rect1[0] && orderedX[1] === rect2[0] || orderedX[0] === rect2[0] && orderedX[1] === rect1[0]) {
+        result[0] = orderedX[1];
+        result[2] = orderedX[2];
+      } else {
+        return null;
+      }
+
+      if (orderedY[0] === rect1[1] && orderedY[1] === rect2[1] || orderedY[0] === rect2[1] && orderedY[1] === rect1[1]) {
+        result[1] = orderedY[1];
+        result[3] = orderedY[2];
+      } else {
+        return null;
+      }
+
+      return result;
+    }
+  }]);
 
   return Util;
 }();
@@ -917,18 +961,17 @@ exports.Util = Util;
 var PDFStringTranslateTable = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2D8, 0x2C7, 0x2C6, 0x2D9, 0x2DD, 0x2DB, 0x2DA, 0x2DC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2022, 0x2020, 0x2021, 0x2026, 0x2014, 0x2013, 0x192, 0x2044, 0x2039, 0x203A, 0x2212, 0x2030, 0x201E, 0x201C, 0x201D, 0x2018, 0x2019, 0x201A, 0x2122, 0xFB01, 0xFB02, 0x141, 0x152, 0x160, 0x178, 0x17D, 0x131, 0x142, 0x153, 0x161, 0x17E, 0, 0x20AC];
 
 function stringToPDFString(str) {
-  var i,
-      n = str.length,
+  var length = str.length,
       strBuf = [];
 
   if (str[0] === '\xFE' && str[1] === '\xFF') {
-    for (i = 2; i < n; i += 2) {
+    for (var i = 2; i < length; i += 2) {
       strBuf.push(String.fromCharCode(str.charCodeAt(i) << 8 | str.charCodeAt(i + 1)));
     }
   } else {
-    for (i = 0; i < n; ++i) {
-      var code = PDFStringTranslateTable[str.charCodeAt(i)];
-      strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
+    for (var _i2 = 0; _i2 < length; ++_i2) {
+      var code = PDFStringTranslateTable[str.charCodeAt(_i2)];
+      strBuf.push(code ? String.fromCharCode(code) : str.charAt(_i2));
     }
   }
 
@@ -1015,7 +1058,7 @@ var createObjectURL = function createObjectURLClosure() {
       return _url_polyfill.URL.createObjectURL(blob);
     }
 
-    var buffer = 'data:' + contentType + ';base64,';
+    var buffer = "data:".concat(contentType, ";base64,");
 
     for (var i = 0, ii = data.length; i < ii; i += 3) {
       var b1 = data[i] & 0xFF;
@@ -1234,11 +1277,11 @@ if (!globalScope._pdfjsCompatibilityChecked) {
   })();
 
   (function checkStringCodePointAt() {
-    if (String.codePointAt) {
+    if (String.prototype.codePointAt) {
       return;
     }
 
-    String.codePointAt = __w_pdfjs_require__(110);
+    __w_pdfjs_require__(110);
   })();
 
   (function checkStringFromCodePoint() {
@@ -8279,7 +8322,9 @@ var JpegImage = function JpegImageClosure() {
       bitsCount = 0;
       fileMarker = findNextFileMarker(data, offset);
 
-      if (fileMarker && fileMarker.invalid) {
+      if (!fileMarker) {
+        break;
+      } else if (fileMarker.invalid) {
         (0, _util.warn)('decodeScan - unexpected MCU data, current marker is: ' + fileMarker.invalid);
         offset = fileMarker.offset;
       }
@@ -8287,7 +8332,7 @@ var JpegImage = function JpegImageClosure() {
       var marker = fileMarker && fileMarker.marker;
 
       if (!marker || marker <= 0xFF00) {
-        throw new JpegError('marker was not found');
+        throw new JpegError('decodeScan - a valid marker was not found.');
       }
 
       if (marker >= 0xFFD0 && marker <= 0xFFD7) {
@@ -8808,7 +8853,12 @@ var JpegImage = function JpegImageClosure() {
               break;
             }
 
-            throw new JpegError('unknown marker ' + fileMarker.toString(16));
+            if (offset > data.length - 2) {
+              (0, _util.warn)('JpegImage.parse - reached the end of the image data ' + 'without finding an EOI marker (0xFFD9).');
+              break markerLoop;
+            }
+
+            throw new JpegError('JpegImage.parse - unknown marker: ' + fileMarker.toString(16));
         }
 
         fileMarker = readUint16();

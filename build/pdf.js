@@ -123,8 +123,8 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 
 
-var pdfjsVersion = '2.2.228';
-var pdfjsBuild = 'd7afb74a';
+var pdfjsVersion = '2.3.158';
+var pdfjsBuild = 'f9ac716e';
 
 var pdfjsSharedUtil = __w_pdfjs_require__(1);
 
@@ -259,13 +259,19 @@ Object.defineProperty(exports, "URL", {
     return _url_polyfill.URL;
   }
 });
-exports.createObjectURL = exports.FormatError = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.NativeImageDecoding = exports.MissingPDFException = exports.InvalidPDFException = exports.AbortException = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.UNSUPPORTED_FEATURES = exports.VerbosityLevel = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = void 0;
+exports.createObjectURL = exports.FormatError = exports.Util = exports.UnknownErrorException = exports.UnexpectedResponseException = exports.TextRenderingMode = exports.StreamType = exports.PermissionFlag = exports.PasswordResponses = exports.PasswordException = exports.NativeImageDecoding = exports.MissingPDFException = exports.InvalidPDFException = exports.AbortException = exports.CMapCompressionType = exports.ImageKind = exports.FontType = exports.AnnotationType = exports.AnnotationStateModelType = exports.AnnotationReviewState = exports.AnnotationReplyType = exports.AnnotationMarkedState = exports.AnnotationFlag = exports.AnnotationFieldFlag = exports.AnnotationBorderStyleType = exports.UNSUPPORTED_FEATURES = exports.VerbosityLevel = exports.OPS = exports.IDENTITY_MATRIX = exports.FONT_IDENTITY_MATRIX = void 0;
 
 __w_pdfjs_require__(2);
 
 var _streams_polyfill = __w_pdfjs_require__(143);
 
 var _url_polyfill = __w_pdfjs_require__(145);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -338,6 +344,29 @@ var AnnotationType = {
   REDACT: 26
 };
 exports.AnnotationType = AnnotationType;
+var AnnotationStateModelType = {
+  MARKED: 'Marked',
+  REVIEW: 'Review'
+};
+exports.AnnotationStateModelType = AnnotationStateModelType;
+var AnnotationMarkedState = {
+  MARKED: 'Marked',
+  UNMARKED: 'Unmarked'
+};
+exports.AnnotationMarkedState = AnnotationMarkedState;
+var AnnotationReviewState = {
+  ACCEPTED: 'Accepted',
+  REJECTED: 'Rejected',
+  CANCELLED: 'Cancelled',
+  COMPLETED: 'Completed',
+  NONE: 'None'
+};
+exports.AnnotationReviewState = AnnotationReviewState;
+var AnnotationReplyType = {
+  GROUP: 'Group',
+  REPLY: 'R'
+};
+exports.AnnotationReplyType = AnnotationReplyType;
 var AnnotationFlag = {
   INVISIBLE: 0x01,
   HIDDEN: 0x02,
@@ -382,30 +411,30 @@ var AnnotationBorderStyleType = {
 };
 exports.AnnotationBorderStyleType = AnnotationBorderStyleType;
 var StreamType = {
-  UNKNOWN: 0,
-  FLATE: 1,
-  LZW: 2,
-  DCT: 3,
-  JPX: 4,
-  JBIG: 5,
-  A85: 6,
-  AHX: 7,
-  CCF: 8,
-  RL: 9
+  UNKNOWN: 'UNKNOWN',
+  FLATE: 'FLATE',
+  LZW: 'LZW',
+  DCT: 'DCT',
+  JPX: 'JPX',
+  JBIG: 'JBIG',
+  A85: 'A85',
+  AHX: 'AHX',
+  CCF: 'CCF',
+  RLX: 'RLX'
 };
 exports.StreamType = StreamType;
 var FontType = {
-  UNKNOWN: 0,
-  TYPE1: 1,
-  TYPE1C: 2,
-  CIDFONTTYPE0: 3,
-  CIDFONTTYPE0C: 4,
-  TRUETYPE: 5,
-  CIDFONTTYPE2: 6,
-  TYPE3: 7,
-  OPENTYPE: 8,
-  TYPE0: 9,
-  MMTYPE1: 10
+  UNKNOWN: 'UNKNOWN',
+  TYPE1: 'TYPE1',
+  TYPE1C: 'TYPE1C',
+  CIDFONTTYPE0: 'CIDFONTTYPE0',
+  CIDFONTTYPE0C: 'CIDFONTTYPE0C',
+  TRUETYPE: 'TRUETYPE',
+  CIDFONTTYPE2: 'CIDFONTTYPE2',
+  TYPE3: 'TYPE3',
+  OPENTYPE: 'OPENTYPE',
+  TYPE0: 'TYPE0',
+  MMTYPE1: 'MMTYPE1'
 };
 exports.FontType = FontType;
 var VerbosityLevel = {
@@ -542,13 +571,13 @@ function getVerbosityLevel() {
 
 function info(msg) {
   if (verbosity >= VerbosityLevel.INFOS) {
-    console.log('Info: ' + msg);
+    console.log("Info: ".concat(msg));
   }
 }
 
 function warn(msg) {
   if (verbosity >= VerbosityLevel.WARNINGS) {
-    console.log('Warning: ' + msg);
+    console.log("Warning: ".concat(msg));
   }
 }
 
@@ -563,8 +592,10 @@ function assert(cond, msg) {
 }
 
 function isSameOrigin(baseUrl, otherUrl) {
+  var base;
+
   try {
-    var base = new _url_polyfill.URL(baseUrl);
+    base = new _url_polyfill.URL(baseUrl);
 
     if (!base.origin || base.origin === 'null') {
       return false;
@@ -767,26 +798,23 @@ function arrayByteLength(arr) {
 }
 
 function arraysToBytes(arr) {
-  if (arr.length === 1 && arr[0] instanceof Uint8Array) {
+  var length = arr.length;
+
+  if (length === 1 && arr[0] instanceof Uint8Array) {
     return arr[0];
   }
 
   var resultLength = 0;
-  var i,
-      ii = arr.length;
-  var item, itemLength;
 
-  for (i = 0; i < ii; i++) {
-    item = arr[i];
-    itemLength = arrayByteLength(item);
-    resultLength += itemLength;
+  for (var i = 0; i < length; i++) {
+    resultLength += arrayByteLength(arr[i]);
   }
 
   var pos = 0;
   var data = new Uint8Array(resultLength);
 
-  for (i = 0; i < ii; i++) {
-    item = arr[i];
+  for (var _i = 0; _i < length; _i++) {
+    var item = arr[_i];
 
     if (!(item instanceof Uint8Array)) {
       if (typeof item === 'string') {
@@ -796,7 +824,7 @@ function arraysToBytes(arr) {
       }
     }
 
-    itemLength = item.byteLength;
+    var itemLength = item.byteLength;
     data.set(item, pos);
     pos += itemLength;
   }
@@ -844,108 +872,124 @@ function isEvalSupported() {
   }
 }
 
-var Util = function UtilClosure() {
-  function Util() {}
+var rgbBuf = ['rgb(', 0, ',', 0, ',', 0, ')'];
 
-  var rgbBuf = ['rgb(', 0, ',', 0, ',', 0, ')'];
+var Util =
+/*#__PURE__*/
+function () {
+  function Util() {
+    _classCallCheck(this, Util);
+  }
 
-  Util.makeCssRgb = function Util_makeCssRgb(r, g, b) {
-    rgbBuf[1] = r;
-    rgbBuf[3] = g;
-    rgbBuf[5] = b;
-    return rgbBuf.join('');
-  };
-
-  Util.transform = function Util_transform(m1, m2) {
-    return [m1[0] * m2[0] + m1[2] * m2[1], m1[1] * m2[0] + m1[3] * m2[1], m1[0] * m2[2] + m1[2] * m2[3], m1[1] * m2[2] + m1[3] * m2[3], m1[0] * m2[4] + m1[2] * m2[5] + m1[4], m1[1] * m2[4] + m1[3] * m2[5] + m1[5]];
-  };
-
-  Util.applyTransform = function Util_applyTransform(p, m) {
-    var xt = p[0] * m[0] + p[1] * m[2] + m[4];
-    var yt = p[0] * m[1] + p[1] * m[3] + m[5];
-    return [xt, yt];
-  };
-
-  Util.applyInverseTransform = function Util_applyInverseTransform(p, m) {
-    var d = m[0] * m[3] - m[1] * m[2];
-    var xt = (p[0] * m[3] - p[1] * m[2] + m[2] * m[5] - m[4] * m[3]) / d;
-    var yt = (-p[0] * m[1] + p[1] * m[0] + m[4] * m[1] - m[5] * m[0]) / d;
-    return [xt, yt];
-  };
-
-  Util.getAxialAlignedBoundingBox = function Util_getAxialAlignedBoundingBox(r, m) {
-    var p1 = Util.applyTransform(r, m);
-    var p2 = Util.applyTransform(r.slice(2, 4), m);
-    var p3 = Util.applyTransform([r[0], r[3]], m);
-    var p4 = Util.applyTransform([r[2], r[1]], m);
-    return [Math.min(p1[0], p2[0], p3[0], p4[0]), Math.min(p1[1], p2[1], p3[1], p4[1]), Math.max(p1[0], p2[0], p3[0], p4[0]), Math.max(p1[1], p2[1], p3[1], p4[1])];
-  };
-
-  Util.inverseTransform = function Util_inverseTransform(m) {
-    var d = m[0] * m[3] - m[1] * m[2];
-    return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d, (m[2] * m[5] - m[4] * m[3]) / d, (m[4] * m[1] - m[5] * m[0]) / d];
-  };
-
-  Util.apply3dTransform = function Util_apply3dTransform(m, v) {
-    return [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
-  };
-
-  Util.singularValueDecompose2dScale = function Util_singularValueDecompose2dScale(m) {
-    var transpose = [m[0], m[2], m[1], m[3]];
-    var a = m[0] * transpose[0] + m[1] * transpose[2];
-    var b = m[0] * transpose[1] + m[1] * transpose[3];
-    var c = m[2] * transpose[0] + m[3] * transpose[2];
-    var d = m[2] * transpose[1] + m[3] * transpose[3];
-    var first = (a + d) / 2;
-    var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
-    var sx = first + second || 1;
-    var sy = first - second || 1;
-    return [Math.sqrt(sx), Math.sqrt(sy)];
-  };
-
-  Util.normalizeRect = function Util_normalizeRect(rect) {
-    var r = rect.slice(0);
-
-    if (rect[0] > rect[2]) {
-      r[0] = rect[2];
-      r[2] = rect[0];
+  _createClass(Util, null, [{
+    key: "makeCssRgb",
+    value: function makeCssRgb(r, g, b) {
+      rgbBuf[1] = r;
+      rgbBuf[3] = g;
+      rgbBuf[5] = b;
+      return rgbBuf.join('');
     }
-
-    if (rect[1] > rect[3]) {
-      r[1] = rect[3];
-      r[3] = rect[1];
+  }, {
+    key: "transform",
+    value: function transform(m1, m2) {
+      return [m1[0] * m2[0] + m1[2] * m2[1], m1[1] * m2[0] + m1[3] * m2[1], m1[0] * m2[2] + m1[2] * m2[3], m1[1] * m2[2] + m1[3] * m2[3], m1[0] * m2[4] + m1[2] * m2[5] + m1[4], m1[1] * m2[4] + m1[3] * m2[5] + m1[5]];
     }
-
-    return r;
-  };
-
-  Util.intersect = function Util_intersect(rect1, rect2) {
-    function compare(a, b) {
-      return a - b;
+  }, {
+    key: "applyTransform",
+    value: function applyTransform(p, m) {
+      var xt = p[0] * m[0] + p[1] * m[2] + m[4];
+      var yt = p[0] * m[1] + p[1] * m[3] + m[5];
+      return [xt, yt];
     }
-
-    var orderedX = [rect1[0], rect1[2], rect2[0], rect2[2]].sort(compare),
-        orderedY = [rect1[1], rect1[3], rect2[1], rect2[3]].sort(compare),
-        result = [];
-    rect1 = Util.normalizeRect(rect1);
-    rect2 = Util.normalizeRect(rect2);
-
-    if (orderedX[0] === rect1[0] && orderedX[1] === rect2[0] || orderedX[0] === rect2[0] && orderedX[1] === rect1[0]) {
-      result[0] = orderedX[1];
-      result[2] = orderedX[2];
-    } else {
-      return false;
+  }, {
+    key: "applyInverseTransform",
+    value: function applyInverseTransform(p, m) {
+      var d = m[0] * m[3] - m[1] * m[2];
+      var xt = (p[0] * m[3] - p[1] * m[2] + m[2] * m[5] - m[4] * m[3]) / d;
+      var yt = (-p[0] * m[1] + p[1] * m[0] + m[4] * m[1] - m[5] * m[0]) / d;
+      return [xt, yt];
     }
-
-    if (orderedY[0] === rect1[1] && orderedY[1] === rect2[1] || orderedY[0] === rect2[1] && orderedY[1] === rect1[1]) {
-      result[1] = orderedY[1];
-      result[3] = orderedY[2];
-    } else {
-      return false;
+  }, {
+    key: "getAxialAlignedBoundingBox",
+    value: function getAxialAlignedBoundingBox(r, m) {
+      var p1 = Util.applyTransform(r, m);
+      var p2 = Util.applyTransform(r.slice(2, 4), m);
+      var p3 = Util.applyTransform([r[0], r[3]], m);
+      var p4 = Util.applyTransform([r[2], r[1]], m);
+      return [Math.min(p1[0], p2[0], p3[0], p4[0]), Math.min(p1[1], p2[1], p3[1], p4[1]), Math.max(p1[0], p2[0], p3[0], p4[0]), Math.max(p1[1], p2[1], p3[1], p4[1])];
     }
+  }, {
+    key: "inverseTransform",
+    value: function inverseTransform(m) {
+      var d = m[0] * m[3] - m[1] * m[2];
+      return [m[3] / d, -m[1] / d, -m[2] / d, m[0] / d, (m[2] * m[5] - m[4] * m[3]) / d, (m[4] * m[1] - m[5] * m[0]) / d];
+    }
+  }, {
+    key: "apply3dTransform",
+    value: function apply3dTransform(m, v) {
+      return [m[0] * v[0] + m[1] * v[1] + m[2] * v[2], m[3] * v[0] + m[4] * v[1] + m[5] * v[2], m[6] * v[0] + m[7] * v[1] + m[8] * v[2]];
+    }
+  }, {
+    key: "singularValueDecompose2dScale",
+    value: function singularValueDecompose2dScale(m) {
+      var transpose = [m[0], m[2], m[1], m[3]];
+      var a = m[0] * transpose[0] + m[1] * transpose[2];
+      var b = m[0] * transpose[1] + m[1] * transpose[3];
+      var c = m[2] * transpose[0] + m[3] * transpose[2];
+      var d = m[2] * transpose[1] + m[3] * transpose[3];
+      var first = (a + d) / 2;
+      var second = Math.sqrt((a + d) * (a + d) - 4 * (a * d - c * b)) / 2;
+      var sx = first + second || 1;
+      var sy = first - second || 1;
+      return [Math.sqrt(sx), Math.sqrt(sy)];
+    }
+  }, {
+    key: "normalizeRect",
+    value: function normalizeRect(rect) {
+      var r = rect.slice(0);
 
-    return result;
-  };
+      if (rect[0] > rect[2]) {
+        r[0] = rect[2];
+        r[2] = rect[0];
+      }
+
+      if (rect[1] > rect[3]) {
+        r[1] = rect[3];
+        r[3] = rect[1];
+      }
+
+      return r;
+    }
+  }, {
+    key: "intersect",
+    value: function intersect(rect1, rect2) {
+      function compare(a, b) {
+        return a - b;
+      }
+
+      var orderedX = [rect1[0], rect1[2], rect2[0], rect2[2]].sort(compare);
+      var orderedY = [rect1[1], rect1[3], rect2[1], rect2[3]].sort(compare);
+      var result = [];
+      rect1 = Util.normalizeRect(rect1);
+      rect2 = Util.normalizeRect(rect2);
+
+      if (orderedX[0] === rect1[0] && orderedX[1] === rect2[0] || orderedX[0] === rect2[0] && orderedX[1] === rect1[0]) {
+        result[0] = orderedX[1];
+        result[2] = orderedX[2];
+      } else {
+        return null;
+      }
+
+      if (orderedY[0] === rect1[1] && orderedY[1] === rect2[1] || orderedY[0] === rect2[1] && orderedY[1] === rect1[1]) {
+        result[1] = orderedY[1];
+        result[3] = orderedY[2];
+      } else {
+        return null;
+      }
+
+      return result;
+    }
+  }]);
 
   return Util;
 }();
@@ -954,18 +998,17 @@ exports.Util = Util;
 var PDFStringTranslateTable = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2D8, 0x2C7, 0x2C6, 0x2D9, 0x2DD, 0x2DB, 0x2DA, 0x2DC, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0x2022, 0x2020, 0x2021, 0x2026, 0x2014, 0x2013, 0x192, 0x2044, 0x2039, 0x203A, 0x2212, 0x2030, 0x201E, 0x201C, 0x201D, 0x2018, 0x2019, 0x201A, 0x2122, 0xFB01, 0xFB02, 0x141, 0x152, 0x160, 0x178, 0x17D, 0x131, 0x142, 0x153, 0x161, 0x17E, 0, 0x20AC];
 
 function stringToPDFString(str) {
-  var i,
-      n = str.length,
+  var length = str.length,
       strBuf = [];
 
   if (str[0] === '\xFE' && str[1] === '\xFF') {
-    for (i = 2; i < n; i += 2) {
+    for (var i = 2; i < length; i += 2) {
       strBuf.push(String.fromCharCode(str.charCodeAt(i) << 8 | str.charCodeAt(i + 1)));
     }
   } else {
-    for (i = 0; i < n; ++i) {
-      var code = PDFStringTranslateTable[str.charCodeAt(i)];
-      strBuf.push(code ? String.fromCharCode(code) : str.charAt(i));
+    for (var _i2 = 0; _i2 < length; ++_i2) {
+      var code = PDFStringTranslateTable[str.charCodeAt(_i2)];
+      strBuf.push(code ? String.fromCharCode(code) : str.charAt(_i2));
     }
   }
 
@@ -1052,7 +1095,7 @@ var createObjectURL = function createObjectURLClosure() {
       return _url_polyfill.URL.createObjectURL(blob);
     }
 
-    var buffer = 'data:' + contentType + ';base64,';
+    var buffer = "data:".concat(contentType, ";base64,");
 
     for (var i = 0, ii = data.length; i < ii; i += 3) {
       var b1 = data[i] & 0xFF;
@@ -1277,11 +1320,11 @@ if (!globalScope._pdfjsCompatibilityChecked) {
   })();
 
   (function checkStringCodePointAt() {
-    if (String.codePointAt) {
+    if (String.prototype.codePointAt) {
       return;
     }
 
-    String.codePointAt = __w_pdfjs_require__(123);
+    __w_pdfjs_require__(123);
   })();
 
   (function checkStringFromCodePoint() {
@@ -9994,7 +10037,6 @@ function getDocument(src) {
 
   if (!worker) {
     var workerParams = {
-      postMessageTransfers: params.postMessageTransfers,
       verbosity: params.verbosity,
       port: _worker_options.GlobalWorkerOptions.workerPort
     };
@@ -10058,7 +10100,7 @@ function _fetchDocument(worker, source, pdfDataRangeTransport, docId) {
 
   return worker.messageHandler.sendWithPromise('GetDocRequest', {
     docId: docId,
-    apiVersion: '2.2.228',
+    apiVersion: '2.3.158',
     source: {
       data: source.data,
       url: source.url,
@@ -10545,7 +10587,6 @@ function () {
       var intentState = this.intentStates[renderingIntent];
 
       if (!intentState.displayReadyCapability) {
-        intentState.receivingOperatorList = true;
         intentState.displayReadyCapability = (0, _util.createPromiseCapability)();
         intentState.operatorList = {
           fnArray: [],
@@ -10554,7 +10595,7 @@ function () {
         };
         stats.time('Page Request');
 
-        this._transport.messageHandler.send('RenderPageRequest', {
+        this._pumpOperatorList({
           pageIndex: this.pageNumber - 1,
           intent: renderingIntent,
           renderInteractiveForms: renderInteractiveForms === true
@@ -10576,6 +10617,11 @@ function () {
 
         if (error) {
           internalRenderTask.capability.reject(error);
+
+          _this5._abortOperatorList({
+            intentState: intentState,
+            reason: error
+          });
         } else {
           internalRenderTask.capability.resolve();
         }
@@ -10647,7 +10693,6 @@ function () {
       if (!intentState.opListReadCapability) {
         opListTask = {};
         opListTask.operatorListChanged = operatorListChanged;
-        intentState.receivingOperatorList = true;
         intentState.opListReadCapability = (0, _util.createPromiseCapability)();
         intentState.renderTasks = [];
         intentState.renderTasks.push(opListTask);
@@ -10659,7 +10704,7 @@ function () {
 
         this._stats.time('Page Request');
 
-        this._transport.messageHandler.send('RenderPageRequest', {
+        this._pumpOperatorList({
           pageIndex: this.pageIndex,
           intent: renderingIntent
         });
@@ -10725,21 +10770,30 @@ function () {
   }, {
     key: "_destroy",
     value: function _destroy() {
+      var _this6 = this;
+
       this.destroyed = true;
       this._transport.pageCache[this.pageIndex] = null;
       var waitOn = [];
       Object.keys(this.intentStates).forEach(function (intent) {
+        var intentState = _this6.intentStates[intent];
+
+        _this6._abortOperatorList({
+          intentState: intentState,
+          reason: new Error('Page was destroyed.'),
+          force: true
+        });
+
         if (intent === 'oplist') {
           return;
         }
 
-        var intentState = this.intentStates[intent];
         intentState.renderTasks.forEach(function (renderTask) {
           var renderCompleted = renderTask.capability.promise["catch"](function () {});
           waitOn.push(renderCompleted);
           renderTask.cancel();
         });
-      }, this);
+      });
       this.objs.clear();
       this.annotationsPromise = null;
       this.pendingCleanup = false;
@@ -10756,18 +10810,20 @@ function () {
   }, {
     key: "_tryCleanup",
     value: function _tryCleanup() {
+      var _this7 = this;
+
       var resetStats = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
       if (!this.pendingCleanup || Object.keys(this.intentStates).some(function (intent) {
-        var intentState = this.intentStates[intent];
-        return intentState.renderTasks.length !== 0 || intentState.receivingOperatorList;
-      }, this)) {
+        var intentState = _this7.intentStates[intent];
+        return intentState.renderTasks.length !== 0 || !intentState.operatorList.lastChunk;
+      })) {
         return;
       }
 
       Object.keys(this.intentStates).forEach(function (intent) {
-        delete this.intentStates[intent];
-      }, this);
+        delete _this7.intentStates[intent];
+      });
       this.objs.clear();
       this.annotationsPromise = null;
 
@@ -10788,9 +10844,7 @@ function () {
     }
   }, {
     key: "_renderPageChunk",
-    value: function _renderPageChunk(operatorListChunk, intent) {
-      var intentState = this.intentStates[intent];
-
+    value: function _renderPageChunk(operatorListChunk, intentState) {
       for (var i = 0, ii = operatorListChunk.length; i < ii; i++) {
         intentState.operatorList.fnArray.push(operatorListChunk.fnArray[i]);
         intentState.operatorList.argsArray.push(operatorListChunk.argsArray[i]);
@@ -10803,10 +10857,91 @@ function () {
       }
 
       if (operatorListChunk.lastChunk) {
-        intentState.receivingOperatorList = false;
-
         this._tryCleanup();
       }
+    }
+  }, {
+    key: "_pumpOperatorList",
+    value: function _pumpOperatorList(args) {
+      var _this8 = this;
+
+      (0, _util.assert)(args.intent, 'PDFPageProxy._pumpOperatorList: Expected "intent" argument.');
+
+      var readableStream = this._transport.messageHandler.sendWithStream('GetOperatorList', args);
+
+      var reader = readableStream.getReader();
+      var intentState = this.intentStates[args.intent];
+      intentState.streamReader = reader;
+
+      var pump = function pump() {
+        reader.read().then(function (_ref6) {
+          var value = _ref6.value,
+              done = _ref6.done;
+
+          if (done) {
+            intentState.streamReader = null;
+            return;
+          }
+
+          if (_this8._transport.destroyed) {
+            return;
+          }
+
+          _this8._renderPageChunk(value.operatorList, intentState);
+
+          pump();
+        }, function (reason) {
+          intentState.streamReader = null;
+
+          if (_this8._transport.destroyed) {
+            return;
+          }
+
+          if (intentState.operatorList) {
+            intentState.operatorList.lastChunk = true;
+
+            for (var i = 0; i < intentState.renderTasks.length; i++) {
+              intentState.renderTasks[i].operatorListChanged();
+            }
+
+            _this8._tryCleanup();
+          }
+
+          if (intentState.displayReadyCapability) {
+            intentState.displayReadyCapability.reject(reason);
+          } else if (intentState.opListReadCapability) {
+            intentState.opListReadCapability.reject(reason);
+          } else {
+            throw reason;
+          }
+        });
+      };
+
+      pump();
+    }
+  }, {
+    key: "_abortOperatorList",
+    value: function _abortOperatorList(_ref7) {
+      var intentState = _ref7.intentState,
+          reason = _ref7.reason,
+          _ref7$force = _ref7.force,
+          force = _ref7$force === void 0 ? false : _ref7$force;
+      (0, _util.assert)(reason instanceof Error, 'PDFPageProxy._abortOperatorList: Expected "reason" argument.');
+
+      if (!intentState.streamReader) {
+        return;
+      }
+
+      if (!force && intentState.renderTasks.length !== 0) {
+        return;
+      }
+
+      if (reason instanceof _display_utils.RenderingCancelledException) {
+        return;
+      }
+
+      intentState.streamReader.cancel(new _util.AbortException(reason && reason.message));
+      intentState.streamReader = null;
     }
   }, {
     key: "pageNumber",
@@ -10861,7 +10996,7 @@ function () {
   _createClass(LoopbackPort, [{
     key: "postMessage",
     value: function postMessage(obj, transfers) {
-      var _this6 = this;
+      var _this9 = this;
 
       function cloneValue(value) {
         if (_typeof(value) !== 'object' || value === null) {
@@ -10912,10 +11047,10 @@ function () {
 
       if (!this._defer) {
         this._listeners.forEach(function (listener) {
-          listener.call(this, {
+          listener.call(_this9, {
             data: obj
           });
-        }, this);
+        });
 
         return;
       }
@@ -10926,9 +11061,9 @@ function () {
       };
 
       this._deferred.then(function () {
-        _this6._listeners.forEach(function (listener) {
-          listener.call(this, e);
-        }, _this6);
+        _this9._listeners.forEach(function (listener) {
+          listener.call(_this9, e);
+        });
       });
     }
   }, {
@@ -11014,15 +11149,13 @@ var PDFWorker = function PDFWorkerClosure() {
   /*#__PURE__*/
   function () {
     function PDFWorker() {
-      var _ref6 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-          _ref6$name = _ref6.name,
-          name = _ref6$name === void 0 ? null : _ref6$name,
-          _ref6$port = _ref6.port,
-          port = _ref6$port === void 0 ? null : _ref6$port,
-          _ref6$postMessageTran = _ref6.postMessageTransfers,
-          postMessageTransfers = _ref6$postMessageTran === void 0 ? true : _ref6$postMessageTran,
-          _ref6$verbosity = _ref6.verbosity,
-          verbosity = _ref6$verbosity === void 0 ? (0, _util.getVerbosityLevel)() : _ref6$verbosity;
+      var _ref8 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref8$name = _ref8.name,
+          name = _ref8$name === void 0 ? null : _ref8$name,
+          _ref8$port = _ref8.port,
+          port = _ref8$port === void 0 ? null : _ref8$port,
+          _ref8$verbosity = _ref8.verbosity,
+          verbosity = _ref8$verbosity === void 0 ? (0, _util.getVerbosityLevel)() : _ref8$verbosity;
 
       _classCallCheck(this, PDFWorker);
 
@@ -11032,7 +11165,7 @@ var PDFWorker = function PDFWorkerClosure() {
 
       this.name = name;
       this.destroyed = false;
-      this.postMessageTransfers = postMessageTransfers !== false;
+      this.postMessageTransfers = true;
       this.verbosity = verbosity;
       this._readyCapability = (0, _util.createPromiseCapability)();
       this._port = null;
@@ -11063,7 +11196,7 @@ var PDFWorker = function PDFWorkerClosure() {
     }, {
       key: "_initialize",
       value: function _initialize() {
-        var _this7 = this;
+        var _this10 = this;
 
         if (typeof Worker !== 'undefined' && !isWorkerDisabled && !getMainThreadWorkerMessageHandler()) {
           var workerSrc = _getWorkerSrc();
@@ -11081,15 +11214,15 @@ var PDFWorker = function PDFWorkerClosure() {
               messageHandler.destroy();
               worker.terminate();
 
-              if (_this7.destroyed) {
-                _this7._readyCapability.reject(new Error('Worker was destroyed'));
+              if (_this10.destroyed) {
+                _this10._readyCapability.reject(new Error('Worker was destroyed'));
               } else {
-                _this7._setupFakeWorker();
+                _this10._setupFakeWorker();
               }
             };
 
             var onWorkerError = function onWorkerError() {
-              if (!_this7._webWorker) {
+              if (!_this10._webWorker) {
                 terminateEarly();
               }
             };
@@ -11098,27 +11231,27 @@ var PDFWorker = function PDFWorkerClosure() {
             messageHandler.on('test', function (data) {
               worker.removeEventListener('error', onWorkerError);
 
-              if (_this7.destroyed) {
+              if (_this10.destroyed) {
                 terminateEarly();
                 return;
               }
 
-              if (data && data.supportTypedArray) {
-                _this7._messageHandler = messageHandler;
-                _this7._port = worker;
-                _this7._webWorker = worker;
+              if (data) {
+                _this10._messageHandler = messageHandler;
+                _this10._port = worker;
+                _this10._webWorker = worker;
 
                 if (!data.supportTransfers) {
-                  _this7.postMessageTransfers = false;
+                  _this10.postMessageTransfers = false;
                 }
 
-                _this7._readyCapability.resolve();
+                _this10._readyCapability.resolve();
 
                 messageHandler.send('configure', {
-                  verbosity: _this7.verbosity
+                  verbosity: _this10.verbosity
                 });
               } else {
-                _this7._setupFakeWorker();
+                _this10._setupFakeWorker();
 
                 messageHandler.destroy();
                 worker.terminate();
@@ -11127,7 +11260,7 @@ var PDFWorker = function PDFWorkerClosure() {
             messageHandler.on('ready', function (data) {
               worker.removeEventListener('error', onWorkerError);
 
-              if (_this7.destroyed) {
+              if (_this10.destroyed) {
                 terminateEarly();
                 return;
               }
@@ -11135,17 +11268,17 @@ var PDFWorker = function PDFWorkerClosure() {
               try {
                 sendTest();
               } catch (e) {
-                _this7._setupFakeWorker();
+                _this10._setupFakeWorker();
               }
             });
 
             var sendTest = function sendTest() {
-              var testObj = new Uint8Array([_this7.postMessageTransfers ? 255 : 0]);
+              var testObj = new Uint8Array([_this10.postMessageTransfers ? 255 : 0]);
 
               try {
                 messageHandler.send('test', testObj, [testObj.buffer]);
               } catch (ex) {
-                (0, _util.info)('Cannot use postMessage transfers');
+                (0, _util.warn)('Cannot use postMessage transfers.');
                 testObj[0] = 0;
                 messageHandler.send('test', testObj);
               }
@@ -11163,7 +11296,7 @@ var PDFWorker = function PDFWorkerClosure() {
     }, {
       key: "_setupFakeWorker",
       value: function _setupFakeWorker() {
-        var _this8 = this;
+        var _this11 = this;
 
         if (!isWorkerDisabled) {
           (0, _util.warn)('Setting up fake worker.');
@@ -11171,23 +11304,23 @@ var PDFWorker = function PDFWorkerClosure() {
         }
 
         setupFakeWorkerGlobal().then(function (WorkerMessageHandler) {
-          if (_this8.destroyed) {
-            _this8._readyCapability.reject(new Error('Worker was destroyed'));
+          if (_this11.destroyed) {
+            _this11._readyCapability.reject(new Error('Worker was destroyed'));
 
             return;
           }
 
           var port = new LoopbackPort();
-          _this8._port = port;
+          _this11._port = port;
           var id = 'fake' + nextFakeWorkerId++;
           var workerHandler = new _message_handler.MessageHandler(id + '_worker', id, port);
           WorkerMessageHandler.setup(workerHandler, port);
           var messageHandler = new _message_handler.MessageHandler(id, id + '_worker', port);
-          _this8._messageHandler = messageHandler;
+          _this11._messageHandler = messageHandler;
 
-          _this8._readyCapability.resolve();
+          _this11._readyCapability.resolve();
         })["catch"](function (reason) {
-          _this8._readyCapability.reject(new Error("Setting up fake worker failed: \"".concat(reason.message, "\".")));
+          _this11._readyCapability.reject(new Error("Setting up fake worker failed: \"".concat(reason.message, "\".")));
         });
       }
     }, {
@@ -11286,7 +11419,7 @@ function () {
   _createClass(WorkerTransport, [{
     key: "destroy",
     value: function destroy() {
-      var _this9 = this;
+      var _this12 = this;
 
       if (this.destroyCapability) {
         return this.destroyCapability.promise;
@@ -11310,44 +11443,44 @@ function () {
       var terminated = this.messageHandler.sendWithPromise('Terminate', null);
       waitOn.push(terminated);
       Promise.all(waitOn).then(function () {
-        _this9.fontLoader.clear();
+        _this12.fontLoader.clear();
 
-        if (_this9._networkStream) {
-          _this9._networkStream.cancelAllRequests();
+        if (_this12._networkStream) {
+          _this12._networkStream.cancelAllRequests(new _util.AbortException('Worker was terminated.'));
         }
 
-        if (_this9.messageHandler) {
-          _this9.messageHandler.destroy();
+        if (_this12.messageHandler) {
+          _this12.messageHandler.destroy();
 
-          _this9.messageHandler = null;
+          _this12.messageHandler = null;
         }
 
-        _this9.destroyCapability.resolve();
+        _this12.destroyCapability.resolve();
       }, this.destroyCapability.reject);
       return this.destroyCapability.promise;
     }
   }, {
     key: "setupMessageHandler",
     value: function setupMessageHandler() {
+      var _this13 = this;
+
       var messageHandler = this.messageHandler,
           loadingTask = this.loadingTask;
       messageHandler.on('GetReader', function (data, sink) {
-        var _this10 = this;
+        (0, _util.assert)(_this13._networkStream);
+        _this13._fullReader = _this13._networkStream.getFullReader();
 
-        (0, _util.assert)(this._networkStream);
-        this._fullReader = this._networkStream.getFullReader();
-
-        this._fullReader.onProgress = function (evt) {
-          _this10._lastProgress = {
+        _this13._fullReader.onProgress = function (evt) {
+          _this13._lastProgress = {
             loaded: evt.loaded,
             total: evt.total
           };
         };
 
         sink.onPull = function () {
-          _this10._fullReader.read().then(function (_ref7) {
-            var value = _ref7.value,
-                done = _ref7.done;
+          _this13._fullReader.read().then(function (_ref9) {
+            var value = _ref9.value,
+                done = _ref9.done;
 
             if (done) {
               sink.close();
@@ -11362,18 +11495,16 @@ function () {
         };
 
         sink.onCancel = function (reason) {
-          _this10._fullReader.cancel(reason);
+          _this13._fullReader.cancel(reason);
         };
-      }, this);
+      });
       messageHandler.on('ReaderHeadersReady', function (data) {
-        var _this11 = this;
-
         var headersCapability = (0, _util.createPromiseCapability)();
-        var fullReader = this._fullReader;
+        var fullReader = _this13._fullReader;
         fullReader.headersReady.then(function () {
           if (!fullReader.isStreamingSupported || !fullReader.isRangeSupported) {
-            if (_this11._lastProgress && loadingTask.onProgress) {
-              loadingTask.onProgress(_this11._lastProgress);
+            if (_this13._lastProgress && loadingTask.onProgress) {
+              loadingTask.onProgress(_this13._lastProgress);
             }
 
             fullReader.onProgress = function (evt) {
@@ -11393,11 +11524,11 @@ function () {
           });
         }, headersCapability.reject);
         return headersCapability.promise;
-      }, this);
+      });
       messageHandler.on('GetRangeReader', function (data, sink) {
-        (0, _util.assert)(this._networkStream);
+        (0, _util.assert)(_this13._networkStream);
 
-        var rangeReader = this._networkStream.getRangeReader(data.begin, data.end);
+        var rangeReader = _this13._networkStream.getRangeReader(data.begin, data.end);
 
         if (!rangeReader) {
           sink.close();
@@ -11405,9 +11536,9 @@ function () {
         }
 
         sink.onPull = function () {
-          rangeReader.read().then(function (_ref8) {
-            var value = _ref8.value,
-                done = _ref8.done;
+          rangeReader.read().then(function (_ref10) {
+            var value = _ref10.value,
+                done = _ref10.done;
 
             if (done) {
               sink.close();
@@ -11424,21 +11555,19 @@ function () {
         sink.onCancel = function (reason) {
           rangeReader.cancel(reason);
         };
-      }, this);
-      messageHandler.on('GetDoc', function (_ref9) {
-        var pdfInfo = _ref9.pdfInfo;
-        this._numPages = pdfInfo.numPages;
+      });
+      messageHandler.on('GetDoc', function (_ref11) {
+        var pdfInfo = _ref11.pdfInfo;
+        _this13._numPages = pdfInfo.numPages;
 
-        loadingTask._capability.resolve(new PDFDocumentProxy(pdfInfo, this));
-      }, this);
+        loadingTask._capability.resolve(new PDFDocumentProxy(pdfInfo, _this13));
+      });
       messageHandler.on('PasswordRequest', function (exception) {
-        var _this12 = this;
-
-        this._passwordCapability = (0, _util.createPromiseCapability)();
+        _this13._passwordCapability = (0, _util.createPromiseCapability)();
 
         if (loadingTask.onPassword) {
           var updatePassword = function updatePassword(password) {
-            _this12._passwordCapability.resolve({
+            _this13._passwordCapability.resolve({
               password: password
             });
           };
@@ -11446,29 +11575,29 @@ function () {
           try {
             loadingTask.onPassword(updatePassword, exception.code);
           } catch (ex) {
-            this._passwordCapability.reject(ex);
+            _this13._passwordCapability.reject(ex);
           }
         } else {
-          this._passwordCapability.reject(new _util.PasswordException(exception.message, exception.code));
+          _this13._passwordCapability.reject(new _util.PasswordException(exception.message, exception.code));
         }
 
-        return this._passwordCapability.promise;
-      }, this);
+        return _this13._passwordCapability.promise;
+      });
       messageHandler.on('PasswordException', function (exception) {
         loadingTask._capability.reject(new _util.PasswordException(exception.message, exception.code));
-      }, this);
+      });
       messageHandler.on('InvalidPDF', function (exception) {
         loadingTask._capability.reject(new _util.InvalidPDFException(exception.message));
-      }, this);
+      });
       messageHandler.on('MissingPDF', function (exception) {
         loadingTask._capability.reject(new _util.MissingPDFException(exception.message));
-      }, this);
+      });
       messageHandler.on('UnexpectedResponse', function (exception) {
         loadingTask._capability.reject(new _util.UnexpectedResponseException(exception.message, exception.status));
-      }, this);
+      });
       messageHandler.on('UnknownError', function (exception) {
         loadingTask._capability.reject(new _util.UnknownErrorException(exception.message, exception.details));
-      }, this);
+      });
       messageHandler.on('DataLoaded', function (data) {
         if (loadingTask.onProgress) {
           loadingTask.onProgress({
@@ -11477,32 +11606,21 @@ function () {
           });
         }
 
-        this.downloadInfoCapability.resolve(data);
-      }, this);
+        _this13.downloadInfoCapability.resolve(data);
+      });
       messageHandler.on('StartRenderPage', function (data) {
-        if (this.destroyed) {
+        if (_this13.destroyed) {
           return;
         }
 
-        var page = this.pageCache[data.pageIndex];
+        var page = _this13.pageCache[data.pageIndex];
 
         page._stats.timeEnd('Page Request');
 
         page._startRenderPage(data.transparency, data.intent);
-      }, this);
-      messageHandler.on('RenderPageChunk', function (data) {
-        if (this.destroyed) {
-          return;
-        }
-
-        var page = this.pageCache[data.pageIndex];
-
-        page._renderPageChunk(data.operatorList, data.intent);
-      }, this);
+      });
       messageHandler.on('commonobj', function (data) {
-        var _this13 = this;
-
-        if (this.destroyed) {
+        if (_this13.destroyed) {
           return;
         }
 
@@ -11511,18 +11629,20 @@ function () {
             type = _data[1],
             exportedData = _data[2];
 
-        if (this.commonObjs.has(id)) {
+        if (_this13.commonObjs.has(id)) {
           return;
         }
 
         switch (type) {
           case 'Font':
-            var params = this._params;
+            var params = _this13._params;
 
             if ('error' in exportedData) {
               var exportedError = exportedData.error;
               (0, _util.warn)("Error during font loading: ".concat(exportedError));
-              this.commonObjs.resolve(id, exportedError);
+
+              _this13.commonObjs.resolve(id, exportedError);
+
               break;
             }
 
@@ -11540,10 +11660,11 @@ function () {
               isEvalSupported: params.isEvalSupported,
               disableFontFace: params.disableFontFace,
               ignoreErrors: params.ignoreErrors,
-              onUnsupportedFeature: this._onUnsupportedFeature.bind(this),
+              onUnsupportedFeature: _this13._onUnsupportedFeature.bind(_this13),
               fontRegistry: fontRegistry
             });
-            this.fontLoader.bind(font).then(function () {
+
+            _this13.fontLoader.bind(font).then(function () {
               _this13.commonObjs.resolve(id, font);
             }, function (reason) {
               messageHandler.sendWithPromise('FontFallback', {
@@ -11552,19 +11673,21 @@ function () {
                 _this13.commonObjs.resolve(id, font);
               });
             });
+
             break;
 
           case 'FontPath':
           case 'FontType3Res':
-            this.commonObjs.resolve(id, exportedData);
+            _this13.commonObjs.resolve(id, exportedData);
+
             break;
 
           default:
             throw new Error("Got unknown common object type ".concat(type));
         }
-      }, this);
+      });
       messageHandler.on('obj', function (data) {
-        if (this.destroyed) {
+        if (_this13.destroyed) {
           return undefined;
         }
 
@@ -11574,7 +11697,7 @@ function () {
             type = _data2[2],
             imageData = _data2[3];
 
-        var pageProxy = this.pageCache[pageIndex];
+        var pageProxy = _this13.pageCache[pageIndex];
 
         if (pageProxy.objs.has(id)) {
           return undefined;
@@ -11614,9 +11737,9 @@ function () {
         }
 
         return undefined;
-      }, this);
+      });
       messageHandler.on('DocProgress', function (data) {
-        if (this.destroyed) {
+        if (_this13.destroyed) {
           return;
         }
 
@@ -11626,32 +11749,10 @@ function () {
             total: data.total
           });
         }
-      }, this);
-      messageHandler.on('PageError', function (data) {
-        if (this.destroyed) {
-          return;
-        }
-
-        var page = this.pageCache[data.pageIndex];
-        var intentState = page.intentStates[data.intent];
-
-        if (intentState.displayReadyCapability) {
-          intentState.displayReadyCapability.reject(new Error(data.error));
-        } else {
-          throw new Error(data.error);
-        }
-
-        if (intentState.operatorList) {
-          intentState.operatorList.lastChunk = true;
-
-          for (var i = 0; i < intentState.renderTasks.length; i++) {
-            intentState.renderTasks[i].operatorListChanged();
-          }
-        }
-      }, this);
-      messageHandler.on('UnsupportedFeature', this._onUnsupportedFeature, this);
+      });
+      messageHandler.on('UnsupportedFeature', this._onUnsupportedFeature.bind(this));
       messageHandler.on('JpegDecode', function (data) {
-        if (this.destroyed) {
+        if (_this13.destroyed) {
           return Promise.reject(new Error('Worker was destroyed'));
         }
 
@@ -11714,21 +11815,35 @@ function () {
 
           img.src = imageUrl;
         });
-      }, this);
-      messageHandler.on('FetchBuiltInCMap', function (data) {
-        if (this.destroyed) {
-          return Promise.reject(new Error('Worker was destroyed'));
+      });
+      messageHandler.on('FetchBuiltInCMap', function (data, sink) {
+        if (_this13.destroyed) {
+          sink.error(new Error('Worker was destroyed'));
+          return;
         }
 
-        return this.CMapReaderFactory.fetch({
-          name: data.name
-        });
-      }, this);
+        var fetched = false;
+
+        sink.onPull = function () {
+          if (fetched) {
+            sink.close();
+            return;
+          }
+
+          fetched = true;
+
+          _this13.CMapReaderFactory.fetch(data).then(function (builtInCMap) {
+            sink.enqueue(builtInCMap, 1, [builtInCMap.cMapData.buffer]);
+          })["catch"](function (reason) {
+            sink.error(reason);
+          });
+        };
+      });
     }
   }, {
     key: "_onUnsupportedFeature",
-    value: function _onUnsupportedFeature(_ref10) {
-      var featureId = _ref10.featureId;
+    value: function _onUnsupportedFeature(_ref12) {
+      var featureId = _ref12.featureId;
 
       if (this.destroyed) {
         return;
@@ -12014,19 +12129,19 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   var InternalRenderTask =
   /*#__PURE__*/
   function () {
-    function InternalRenderTask(_ref11) {
-      var callback = _ref11.callback,
-          params = _ref11.params,
-          objs = _ref11.objs,
-          commonObjs = _ref11.commonObjs,
-          operatorList = _ref11.operatorList,
-          pageNumber = _ref11.pageNumber,
-          canvasFactory = _ref11.canvasFactory,
-          webGLContext = _ref11.webGLContext,
-          _ref11$useRequestAnim = _ref11.useRequestAnimationFrame,
-          useRequestAnimationFrame = _ref11$useRequestAnim === void 0 ? false : _ref11$useRequestAnim,
-          _ref11$pdfBug = _ref11.pdfBug,
-          pdfBug = _ref11$pdfBug === void 0 ? false : _ref11$pdfBug;
+    function InternalRenderTask(_ref13) {
+      var callback = _ref13.callback,
+          params = _ref13.params,
+          objs = _ref13.objs,
+          commonObjs = _ref13.commonObjs,
+          operatorList = _ref13.operatorList,
+          pageNumber = _ref13.pageNumber,
+          canvasFactory = _ref13.canvasFactory,
+          webGLContext = _ref13.webGLContext,
+          _ref13$useRequestAnim = _ref13.useRequestAnimationFrame,
+          useRequestAnimationFrame = _ref13$useRequestAnim === void 0 ? false : _ref13$useRequestAnim,
+          _ref13$pdfBug = _ref13.pdfBug,
+          pdfBug = _ref13$pdfBug === void 0 ? false : _ref13$pdfBug;
 
       _classCallCheck(this, InternalRenderTask);
 
@@ -12218,9 +12333,9 @@ var InternalRenderTask = function InternalRenderTaskClosure() {
   return InternalRenderTask;
 }();
 
-var version = '2.2.228';
+var version = '2.3.158';
 exports.version = version;
-var build = 'd7afb74a';
+var build = 'f9ac716e';
 exports.build = build;
 
 /***/ }),
@@ -13315,9 +13430,22 @@ function addLinkAttributes(link) {
   var _ref7 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
       url = _ref7.url,
       target = _ref7.target,
-      rel = _ref7.rel;
+      rel = _ref7.rel,
+      _ref7$enabled = _ref7.enabled,
+      enabled = _ref7$enabled === void 0 ? true : _ref7$enabled;
 
-  link.href = link.title = url ? (0, _util.removeNullCharacters)(url) : '';
+  var urlNullRemoved = url ? (0, _util.removeNullCharacters)(url) : '';
+
+  if (enabled) {
+    link.href = link.title = urlNullRemoved;
+  } else {
+    link.href = '';
+    link.title = "Disabled: ".concat(urlNullRemoved);
+
+    link.onclick = function () {
+      return false;
+    };
+  }
 
   if (url) {
     var LinkTargetValues = Object.values(LinkTarget);
@@ -15215,15 +15343,20 @@ var CanvasGraphics = function CanvasGraphicsClosure() {
       consumePath = typeof consumePath !== 'undefined' ? consumePath : true;
       var ctx = this.ctx;
       var strokeColor = this.current.strokeColor;
-      ctx.lineWidth = Math.max(this.getSinglePixelWidth() * MIN_WIDTH_FACTOR, this.current.lineWidth);
       ctx.globalAlpha = this.current.strokeAlpha;
 
       if (strokeColor && strokeColor.hasOwnProperty('type') && strokeColor.type === 'Pattern') {
         ctx.save();
+        var transform = ctx.mozCurrentTransform;
+
+        var scale = _util.Util.singularValueDecompose2dScale(transform)[0];
+
         ctx.strokeStyle = strokeColor.getPattern(ctx, this);
+        ctx.lineWidth = Math.max(this.getSinglePixelWidth() * MIN_WIDTH_FACTOR, this.current.lineWidth * scale);
         ctx.stroke();
         ctx.restore();
       } else {
+        ctx.lineWidth = Math.max(this.getSinglePixelWidth() * MIN_WIDTH_FACTOR, this.current.lineWidth);
         ctx.stroke();
       }
 
@@ -16219,17 +16352,32 @@ exports.TilingPattern = void 0;
 var _util = __w_pdfjs_require__(1);
 
 var ShadingIRs = {};
+
+function applyBoundingBox(ctx, bbox) {
+  if (!bbox || typeof Path2D === 'undefined') {
+    return;
+  }
+
+  var width = bbox[2] - bbox[0];
+  var height = bbox[3] - bbox[1];
+  var region = new Path2D();
+  region.rect(bbox[0], bbox[1], width, height);
+  ctx.clip(region);
+}
+
 ShadingIRs.RadialAxial = {
   fromIR: function RadialAxial_fromIR(raw) {
     var type = raw[1];
-    var colorStops = raw[2];
-    var p0 = raw[3];
-    var p1 = raw[4];
-    var r0 = raw[5];
-    var r1 = raw[6];
+    var bbox = raw[2];
+    var colorStops = raw[3];
+    var p0 = raw[4];
+    var p1 = raw[5];
+    var r0 = raw[6];
+    var r1 = raw[7];
     return {
       type: 'Pattern',
       getPattern: function RadialAxial_getPattern(ctx) {
+        applyBoundingBox(ctx, bbox);
         var grad;
 
         if (type === 'axial') {
@@ -16457,10 +16605,12 @@ ShadingIRs.Mesh = {
     var figures = raw[4];
     var bounds = raw[5];
     var matrix = raw[6];
+    var bbox = raw[7];
     var background = raw[8];
     return {
       type: 'Pattern',
       getPattern: function Mesh_getPattern(ctx, owner, shadingFill) {
+        applyBoundingBox(ctx, bbox);
         var scale;
 
         if (shadingFill) {
@@ -16663,53 +16813,21 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.MessageHandler = MessageHandler;
 
-var _regenerator = _interopRequireDefault(__w_pdfjs_require__(148));
-
 var _util = __w_pdfjs_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function resolveCall(_x, _x2) {
-  return _resolveCall.apply(this, arguments);
-}
-
-function _resolveCall() {
-  _resolveCall = _asyncToGenerator(
-  /*#__PURE__*/
-  _regenerator["default"].mark(function _callee(fn, args) {
-    var thisArg,
-        _args = arguments;
-    return _regenerator["default"].wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            thisArg = _args.length > 2 && _args[2] !== undefined ? _args[2] : null;
-
-            if (fn) {
-              _context.next = 3;
-              break;
-            }
-
-            return _context.abrupt("return", undefined);
-
-          case 3:
-            return _context.abrupt("return", fn.apply(thisArg, args));
-
-          case 4:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee);
-  }));
-  return _resolveCall.apply(this, arguments);
-}
+var StreamKind = {
+  UNKNOWN: 0,
+  CANCEL: 1,
+  CANCEL_COMPLETE: 2,
+  CLOSE: 3,
+  ENQUEUE: 4,
+  ERROR: 5,
+  PULL: 6,
+  PULL_COMPLETE: 7,
+  START_COMPLETE: 8
+};
 
 function wrapReason(reason) {
   if (_typeof(reason) !== 'object') {
@@ -16726,29 +16844,20 @@ function wrapReason(reason) {
     case 'UnexpectedResponseException':
       return new _util.UnexpectedResponseException(reason.message, reason.status);
 
-    default:
+    case 'UnknownErrorException':
       return new _util.UnknownErrorException(reason.message, reason.details);
+
+    default:
+      return new _util.UnknownErrorException(reason.message, reason.toString());
   }
 }
 
-function makeReasonSerializable(reason) {
-  if (!(reason instanceof Error) || reason instanceof _util.AbortException || reason instanceof _util.MissingPDFException || reason instanceof _util.UnexpectedResponseException || reason instanceof _util.UnknownErrorException) {
-    return reason;
-  }
-
-  return new _util.UnknownErrorException(reason.message, reason.toString());
-}
-
-function resolveOrReject(capability, success, reason) {
-  if (success) {
+function resolveOrReject(capability, data) {
+  if (data.success) {
     capability.resolve();
   } else {
-    capability.reject(reason);
+    capability.reject(wrapReason(data.reason));
   }
-}
-
-function finalize(promise) {
-  return Promise.resolve(promise)["catch"](function () {});
 }
 
 function MessageHandler(sourceName, targetName, comObj) {
@@ -16795,8 +16904,8 @@ function MessageHandler(sourceName, targetName, comObj) {
       if (data.callbackId) {
         var _sourceName = _this.sourceName;
         var _targetName = data.sourceName;
-        Promise.resolve().then(function () {
-          return action[0].call(action[1], data.data);
+        new Promise(function (resolve) {
+          resolve(action(data.data));
         }).then(function (result) {
           comObj.postMessage({
             sourceName: _sourceName,
@@ -16811,13 +16920,13 @@ function MessageHandler(sourceName, targetName, comObj) {
             targetName: _targetName,
             isReply: true,
             callbackId: data.callbackId,
-            error: makeReasonSerializable(reason)
+            error: wrapReason(reason)
           });
         });
       } else if (data.streamId) {
         _this._createStreamSink(data);
       } else {
-        action[0].call(action[1], data.data);
+        action(data.data);
       }
     } else {
       throw new Error("Unknown action from worker: ".concat(data.action));
@@ -16828,40 +16937,38 @@ function MessageHandler(sourceName, targetName, comObj) {
 }
 
 MessageHandler.prototype = {
-  on: function on(actionName, handler, scope) {
+  on: function on(actionName, handler) {
     var ah = this.actionHandler;
 
     if (ah[actionName]) {
       throw new Error("There is already an actionName called \"".concat(actionName, "\""));
     }
 
-    ah[actionName] = [handler, scope];
+    ah[actionName] = handler;
   },
   send: function send(actionName, data, transfers) {
-    var message = {
+    this.postMessage({
       sourceName: this.sourceName,
       targetName: this.targetName,
       action: actionName,
       data: data
-    };
-    this.postMessage(message, transfers);
+    }, transfers);
   },
   sendWithPromise: function sendWithPromise(actionName, data, transfers) {
     var callbackId = this.callbackId++;
-    var message = {
-      sourceName: this.sourceName,
-      targetName: this.targetName,
-      action: actionName,
-      data: data,
-      callbackId: callbackId
-    };
     var capability = (0, _util.createPromiseCapability)();
     this.callbacksCapabilities[callbackId] = capability;
 
     try {
-      this.postMessage(message, transfers);
-    } catch (e) {
-      capability.reject(e);
+      this.postMessage({
+        sourceName: this.sourceName,
+        targetName: this.targetName,
+        action: actionName,
+        callbackId: callbackId,
+        data: data
+      }, transfers);
+    } catch (ex) {
+      capability.reject(ex);
     }
 
     return capability.promise;
@@ -16872,6 +16979,7 @@ MessageHandler.prototype = {
     var streamId = this.streamId++;
     var sourceName = this.sourceName;
     var targetName = this.targetName;
+    var comObj = this.comObj;
     return new _util.ReadableStream({
       start: function start(controller) {
         var startCapability = (0, _util.createPromiseCapability)();
@@ -16888,44 +16996,39 @@ MessageHandler.prototype = {
           streamId: streamId,
           data: data,
           desiredSize: controller.desiredSize
-        });
+        }, transfers);
 
         return startCapability.promise;
       },
       pull: function pull(controller) {
         var pullCapability = (0, _util.createPromiseCapability)();
         _this2.streamControllers[streamId].pullCall = pullCapability;
-
-        _this2.postMessage({
+        comObj.postMessage({
           sourceName: sourceName,
           targetName: targetName,
-          stream: 'pull',
+          stream: StreamKind.PULL,
           streamId: streamId,
           desiredSize: controller.desiredSize
         });
-
         return pullCapability.promise;
       },
       cancel: function cancel(reason) {
+        (0, _util.assert)(reason instanceof Error, 'cancel must have a valid reason');
         var cancelCapability = (0, _util.createPromiseCapability)();
         _this2.streamControllers[streamId].cancelCall = cancelCapability;
         _this2.streamControllers[streamId].isClosed = true;
-
-        _this2.postMessage({
+        comObj.postMessage({
           sourceName: sourceName,
           targetName: targetName,
-          stream: 'cancel',
-          reason: reason,
-          streamId: streamId
+          stream: StreamKind.CANCEL,
+          streamId: streamId,
+          reason: wrapReason(reason)
         });
-
         return cancelCapability.promise;
       }
     }, queueingStrategy);
   },
   _createStreamSink: function _createStreamSink(data) {
-    var _this3 = this;
-
     var self = this;
     var action = this.actionHandler[data.action];
     var streamId = data.streamId;
@@ -16933,25 +17036,7 @@ MessageHandler.prototype = {
     var sourceName = this.sourceName;
     var targetName = data.sourceName;
     var capability = (0, _util.createPromiseCapability)();
-
-    var sendStreamRequest = function sendStreamRequest(_ref) {
-      var stream = _ref.stream,
-          chunk = _ref.chunk,
-          transfers = _ref.transfers,
-          success = _ref.success,
-          reason = _ref.reason;
-
-      _this3.postMessage({
-        sourceName: sourceName,
-        targetName: targetName,
-        stream: stream,
-        streamId: streamId,
-        chunk: chunk,
-        success: success,
-        reason: reason
-      }, transfers);
-    };
-
+    var comObj = this.comObj;
     var streamSink = {
       enqueue: function enqueue(chunk) {
         var size = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
@@ -16969,11 +17054,13 @@ MessageHandler.prototype = {
           this.ready = this.sinkCapability.promise;
         }
 
-        sendStreamRequest({
-          stream: 'enqueue',
-          chunk: chunk,
-          transfers: transfers
-        });
+        self.postMessage({
+          sourceName: sourceName,
+          targetName: targetName,
+          stream: StreamKind.ENQUEUE,
+          streamId: streamId,
+          chunk: chunk
+        }, transfers);
       },
       close: function close() {
         if (this.isCancelled) {
@@ -16981,20 +17068,28 @@ MessageHandler.prototype = {
         }
 
         this.isCancelled = true;
-        sendStreamRequest({
-          stream: 'close'
+        comObj.postMessage({
+          sourceName: sourceName,
+          targetName: targetName,
+          stream: StreamKind.CLOSE,
+          streamId: streamId
         });
         delete self.streamSinks[streamId];
       },
       error: function error(reason) {
+        (0, _util.assert)(reason instanceof Error, 'error must have a valid reason');
+
         if (this.isCancelled) {
           return;
         }
 
         this.isCancelled = true;
-        sendStreamRequest({
-          stream: 'error',
-          reason: reason
+        comObj.postMessage({
+          sourceName: sourceName,
+          targetName: targetName,
+          stream: StreamKind.ERROR,
+          streamId: streamId,
+          reason: wrapReason(reason)
         });
       },
       sinkCapability: capability,
@@ -17007,62 +17102,58 @@ MessageHandler.prototype = {
     streamSink.sinkCapability.resolve();
     streamSink.ready = streamSink.sinkCapability.promise;
     this.streamSinks[streamId] = streamSink;
-    resolveCall(action[0], [data.data, streamSink], action[1]).then(function () {
-      sendStreamRequest({
-        stream: 'start_complete',
+    new Promise(function (resolve) {
+      resolve(action(data.data, streamSink));
+    }).then(function () {
+      comObj.postMessage({
+        sourceName: sourceName,
+        targetName: targetName,
+        stream: StreamKind.START_COMPLETE,
+        streamId: streamId,
         success: true
       });
     }, function (reason) {
-      sendStreamRequest({
-        stream: 'start_complete',
-        success: false,
-        reason: reason
+      comObj.postMessage({
+        sourceName: sourceName,
+        targetName: targetName,
+        stream: StreamKind.START_COMPLETE,
+        streamId: streamId,
+        reason: wrapReason(reason)
       });
     });
   },
   _processStreamMessage: function _processStreamMessage(data) {
-    var _this4 = this;
+    var _this3 = this;
 
     var sourceName = this.sourceName;
     var targetName = data.sourceName;
     var streamId = data.streamId;
-
-    var sendStreamResponse = function sendStreamResponse(_ref2) {
-      var stream = _ref2.stream,
-          success = _ref2.success,
-          reason = _ref2.reason;
-
-      _this4.comObj.postMessage({
-        sourceName: sourceName,
-        targetName: targetName,
-        stream: stream,
-        success: success,
-        streamId: streamId,
-        reason: reason
-      });
-    };
+    var comObj = this.comObj;
 
     var deleteStreamController = function deleteStreamController() {
-      Promise.all([_this4.streamControllers[data.streamId].startCall, _this4.streamControllers[data.streamId].pullCall, _this4.streamControllers[data.streamId].cancelCall].map(function (capability) {
-        return capability && finalize(capability.promise);
+      Promise.all([_this3.streamControllers[data.streamId].startCall, _this3.streamControllers[data.streamId].pullCall, _this3.streamControllers[data.streamId].cancelCall].map(function (capability) {
+        return capability && capability.promise["catch"](function () {});
       })).then(function () {
-        delete _this4.streamControllers[data.streamId];
+        delete _this3.streamControllers[data.streamId];
       });
     };
 
     switch (data.stream) {
-      case 'start_complete':
-        resolveOrReject(this.streamControllers[data.streamId].startCall, data.success, wrapReason(data.reason));
+      case StreamKind.START_COMPLETE:
+        resolveOrReject(this.streamControllers[data.streamId].startCall, data);
         break;
 
-      case 'pull_complete':
-        resolveOrReject(this.streamControllers[data.streamId].pullCall, data.success, wrapReason(data.reason));
+      case StreamKind.PULL_COMPLETE:
+        resolveOrReject(this.streamControllers[data.streamId].pullCall, data);
         break;
 
-      case 'pull':
+      case StreamKind.PULL:
         if (!this.streamSinks[data.streamId]) {
-          sendStreamResponse({
-            stream: 'pull_complete',
+          comObj.postMessage({
+            sourceName: sourceName,
+            targetName: targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId: streamId,
             success: true
           });
           break;
@@ -17073,21 +17164,29 @@ MessageHandler.prototype = {
         }
 
         this.streamSinks[data.streamId].desiredSize = data.desiredSize;
-        resolveCall(this.streamSinks[data.streamId].onPull).then(function () {
-          sendStreamResponse({
-            stream: 'pull_complete',
+        var onPull = this.streamSinks[data.streamId].onPull;
+        new Promise(function (resolve) {
+          resolve(onPull && onPull());
+        }).then(function () {
+          comObj.postMessage({
+            sourceName: sourceName,
+            targetName: targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId: streamId,
             success: true
           });
         }, function (reason) {
-          sendStreamResponse({
-            stream: 'pull_complete',
-            success: false,
-            reason: reason
+          comObj.postMessage({
+            sourceName: sourceName,
+            targetName: targetName,
+            stream: StreamKind.PULL_COMPLETE,
+            streamId: streamId,
+            reason: wrapReason(reason)
           });
         });
         break;
 
-      case 'enqueue':
+      case StreamKind.ENQUEUE:
         (0, _util.assert)(this.streamControllers[data.streamId], 'enqueue should have stream controller');
 
         if (!this.streamControllers[data.streamId].isClosed) {
@@ -17096,7 +17195,7 @@ MessageHandler.prototype = {
 
         break;
 
-      case 'close':
+      case StreamKind.CLOSE:
         (0, _util.assert)(this.streamControllers[data.streamId], 'close should have stream controller');
 
         if (this.streamControllers[data.streamId].isClosed) {
@@ -17108,32 +17207,40 @@ MessageHandler.prototype = {
         deleteStreamController();
         break;
 
-      case 'error':
+      case StreamKind.ERROR:
         (0, _util.assert)(this.streamControllers[data.streamId], 'error should have stream controller');
         this.streamControllers[data.streamId].controller.error(wrapReason(data.reason));
         deleteStreamController();
         break;
 
-      case 'cancel_complete':
-        resolveOrReject(this.streamControllers[data.streamId].cancelCall, data.success, wrapReason(data.reason));
+      case StreamKind.CANCEL_COMPLETE:
+        resolveOrReject(this.streamControllers[data.streamId].cancelCall, data);
         deleteStreamController();
         break;
 
-      case 'cancel':
+      case StreamKind.CANCEL:
         if (!this.streamSinks[data.streamId]) {
           break;
         }
 
-        resolveCall(this.streamSinks[data.streamId].onCancel, [wrapReason(data.reason)]).then(function () {
-          sendStreamResponse({
-            stream: 'cancel_complete',
+        var onCancel = this.streamSinks[data.streamId].onCancel;
+        new Promise(function (resolve) {
+          resolve(onCancel && onCancel(wrapReason(data.reason)));
+        }).then(function () {
+          comObj.postMessage({
+            sourceName: sourceName,
+            targetName: targetName,
+            stream: StreamKind.CANCEL_COMPLETE,
+            streamId: streamId,
             success: true
           });
         }, function (reason) {
-          sendStreamResponse({
-            stream: 'cancel_complete',
-            success: false,
-            reason: reason
+          comObj.postMessage({
+            sourceName: sourceName,
+            targetName: targetName,
+            stream: StreamKind.CANCEL_COMPLETE,
+            streamId: streamId,
+            reason: wrapReason(reason)
           });
         });
         this.streamSinks[data.streamId].sinkCapability.reject(wrapReason(data.reason));
@@ -18808,12 +18915,9 @@ var renderTextLayer = function renderTextLayerClosure() {
     return !NonWhitespaceRegexp.test(str);
   }
 
-  var styleBuf = ['left: ', 0, 'px; top: ', 0, 'px; font-size: ', 0, 'px; font-family: ', '', ';'];
-
   function appendText(task, geom, styles) {
     var textDiv = document.createElement('span');
     var textDivProperties = {
-      style: null,
       angle: 0,
       canvasWidth: 0,
       isWhitespace: false,
@@ -18853,8 +18957,7 @@ var renderTextLayer = function renderTextLayerClosure() {
       fontAscent = (1 + style.descent) * fontAscent;
     }
 
-    var left;
-    var top;
+    var left, top;
 
     if (angle === 0) {
       left = tx[4];
@@ -18864,12 +18967,10 @@ var renderTextLayer = function renderTextLayerClosure() {
       top = tx[5] - fontAscent * Math.cos(angle);
     }
 
-    styleBuf[1] = left;
-    styleBuf[3] = top;
-    styleBuf[5] = fontHeight;
-    styleBuf[7] = style.fontFamily;
-    textDivProperties.style = styleBuf.join('');
-    textDiv.setAttribute('style', textDivProperties.style);
+    textDiv.style.left = "".concat(left, "px");
+    textDiv.style.top = "".concat(top, "px");
+    textDiv.style.fontSize = "".concat(fontHeight, "px");
+    textDiv.style.fontFamily = style.fontFamily;
     textDiv.textContent = geom.str;
 
     if (task._fontInspectorEnabled) {
@@ -19251,7 +19352,7 @@ var renderTextLayer = function renderTextLayerClosure() {
         _this._layoutTextCtx.canvas.height = 0;
         _this._layoutTextCtx = null;
       }
-    });
+    })["catch"](function () {});
   }
 
   TextLayerRenderTask.prototype = {
@@ -19283,30 +19384,32 @@ var renderTextLayer = function renderTextLayerClosure() {
       }
     },
     _layoutText: function _layoutText(textDiv) {
-      var textLayerFrag = this._container;
-
       var textDivProperties = this._textDivProperties.get(textDiv);
 
       if (textDivProperties.isWhitespace) {
         return;
       }
 
-      var fontSize = textDiv.style.fontSize;
-      var fontFamily = textDiv.style.fontFamily;
-
-      if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {
-        this._layoutTextCtx.font = fontSize + ' ' + fontFamily;
-        this._layoutTextLastFontSize = fontSize;
-        this._layoutTextLastFontFamily = fontFamily;
-      }
-
-      var width = this._layoutTextCtx.measureText(textDiv.textContent).width;
-
       var transform = '';
 
-      if (textDivProperties.canvasWidth !== 0 && width > 0) {
-        textDivProperties.scale = textDivProperties.canvasWidth / width;
-        transform = "scaleX(".concat(textDivProperties.scale, ")");
+      if (textDivProperties.canvasWidth !== 0) {
+        var _textDiv$style = textDiv.style,
+            fontSize = _textDiv$style.fontSize,
+            fontFamily = _textDiv$style.fontFamily;
+
+        if (fontSize !== this._layoutTextLastFontSize || fontFamily !== this._layoutTextLastFontFamily) {
+          this._layoutTextCtx.font = "".concat(fontSize, " ").concat(fontFamily);
+          this._layoutTextLastFontSize = fontSize;
+          this._layoutTextLastFontFamily = fontFamily;
+        }
+
+        var _this$_layoutTextCtx$ = this._layoutTextCtx.measureText(textDiv.textContent),
+            width = _this$_layoutTextCtx$.width;
+
+        if (width > 0) {
+          textDivProperties.scale = textDivProperties.canvasWidth / width;
+          transform = "scaleX(".concat(textDivProperties.scale, ")");
+        }
       }
 
       if (textDivProperties.angle !== 0) {
@@ -19314,13 +19417,16 @@ var renderTextLayer = function renderTextLayerClosure() {
       }
 
       if (transform.length > 0) {
-        textDivProperties.originalTransform = transform;
+        if (this._enhanceTextSelection) {
+          textDivProperties.originalTransform = transform;
+        }
+
         textDiv.style.transform = transform;
       }
 
       this._textDivProperties.set(textDiv, textDivProperties);
 
-      textLayerFrag.appendChild(textDiv);
+      this._container.appendChild(textDiv);
     },
     _render: function TextLayer_render(timeout) {
       var _this2 = this;
@@ -19388,55 +19494,65 @@ var renderTextLayer = function renderTextLayerClosure() {
         this._bounds = null;
       }
 
+      var NO_PADDING = '0 0 0 0';
+      var transformBuf = [],
+          paddingBuf = [];
+
       for (var i = 0, ii = this._textDivs.length; i < ii; i++) {
         var div = this._textDivs[i];
 
-        var divProperties = this._textDivProperties.get(div);
+        var divProps = this._textDivProperties.get(div);
 
-        if (divProperties.isWhitespace) {
+        if (divProps.isWhitespace) {
           continue;
         }
 
         if (expandDivs) {
-          var transform = '',
-              padding = '';
+          transformBuf.length = 0;
+          paddingBuf.length = 0;
 
-          if (divProperties.scale !== 1) {
-            transform = 'scaleX(' + divProperties.scale + ')';
+          if (divProps.originalTransform) {
+            transformBuf.push(divProps.originalTransform);
           }
 
-          if (divProperties.angle !== 0) {
-            transform = 'rotate(' + divProperties.angle + 'deg) ' + transform;
+          if (divProps.paddingTop > 0) {
+            paddingBuf.push("".concat(divProps.paddingTop, "px"));
+            transformBuf.push("translateY(".concat(-divProps.paddingTop, "px)"));
+          } else {
+            paddingBuf.push(0);
           }
 
-          if (divProperties.paddingLeft !== 0) {
-            padding += ' padding-left: ' + divProperties.paddingLeft / divProperties.scale + 'px;';
-            transform += ' translateX(' + -divProperties.paddingLeft / divProperties.scale + 'px)';
+          if (divProps.paddingRight > 0) {
+            paddingBuf.push("".concat(divProps.paddingRight / divProps.scale, "px"));
+          } else {
+            paddingBuf.push(0);
           }
 
-          if (divProperties.paddingTop !== 0) {
-            padding += ' padding-top: ' + divProperties.paddingTop + 'px;';
-            transform += ' translateY(' + -divProperties.paddingTop + 'px)';
+          if (divProps.paddingBottom > 0) {
+            paddingBuf.push("".concat(divProps.paddingBottom, "px"));
+          } else {
+            paddingBuf.push(0);
           }
 
-          if (divProperties.paddingRight !== 0) {
-            padding += ' padding-right: ' + divProperties.paddingRight / divProperties.scale + 'px;';
+          if (divProps.paddingLeft > 0) {
+            paddingBuf.push("".concat(divProps.paddingLeft / divProps.scale, "px"));
+            transformBuf.push("translateX(".concat(-divProps.paddingLeft / divProps.scale, "px)"));
+          } else {
+            paddingBuf.push(0);
           }
 
-          if (divProperties.paddingBottom !== 0) {
-            padding += ' padding-bottom: ' + divProperties.paddingBottom + 'px;';
+          var padding = paddingBuf.join(' ');
+
+          if (padding !== NO_PADDING) {
+            div.style.padding = padding;
           }
 
-          if (padding !== '') {
-            div.setAttribute('style', divProperties.style + padding);
-          }
-
-          if (transform !== '') {
-            div.style.transform = transform;
+          if (transformBuf.length) {
+            div.style.transform = transformBuf.join(' ');
           }
         } else {
-          div.style.padding = 0;
-          div.style.transform = divProperties.originalTransform || '';
+          div.style.padding = null;
+          div.style.transform = divProps.originalTransform;
         }
       }
     }
@@ -19635,11 +19751,11 @@ function () {
 
       var rect = _util.Util.normalizeRect([data.rect[0], page.view[3] - data.rect[1] + page.view[1], data.rect[2], page.view[3] - data.rect[3] + page.view[1]]);
 
-      container.style.transform = 'matrix(' + viewport.transform.join(',') + ')';
-      container.style.transformOrigin = -rect[0] + 'px ' + -rect[1] + 'px';
+      container.style.transform = "matrix(".concat(viewport.transform.join(','), ")");
+      container.style.transformOrigin = "-".concat(rect[0], "px -").concat(rect[1], "px");
 
       if (!ignoreBorder && data.borderStyle.width > 0) {
-        container.style.borderWidth = data.borderStyle.width + 'px';
+        container.style.borderWidth = "".concat(data.borderStyle.width, "px");
 
         if (data.borderStyle.style !== _util.AnnotationBorderStyleType.UNDERLINE) {
           width = width - 2 * data.borderStyle.width;
@@ -19650,7 +19766,7 @@ function () {
         var verticalRadius = data.borderStyle.verticalCornerRadius;
 
         if (horizontalRadius > 0 || verticalRadius > 0) {
-          var radius = horizontalRadius + 'px / ' + verticalRadius + 'px';
+          var radius = "".concat(horizontalRadius, "px / ").concat(verticalRadius, "px");
           container.style.borderRadius = radius;
         }
 
@@ -19686,10 +19802,10 @@ function () {
         }
       }
 
-      container.style.left = rect[0] + 'px';
-      container.style.top = rect[1] + 'px';
-      container.style.width = width + 'px';
-      container.style.height = height + 'px';
+      container.style.left = "".concat(rect[0], "px");
+      container.style.top = "".concat(rect[1], "px");
+      container.style.width = "".concat(width, "px");
+      container.style.height = "".concat(height, "px");
       return container;
     }
   }, {
@@ -19747,7 +19863,8 @@ function (_AnnotationElement) {
       (0, _display_utils.addLinkAttributes)(link, {
         url: data.url,
         target: data.newWindow ? _display_utils.LinkTarget.BLANK : linkService.externalLinkTarget,
-        rel: linkService.externalLinkRel
+        rel: linkService.externalLinkRel,
+        enabled: linkService.externalLinkEnabled
       });
 
       if (!data.url) {
@@ -19898,7 +20015,7 @@ function (_WidgetAnnotationElem) {
           var fieldWidth = this.data.rect[2] - this.data.rect[0];
           var combWidth = fieldWidth / this.data.maxLen;
           element.classList.add('comb');
-          element.style.letterSpacing = 'calc(' + combWidth + 'px - 1ch)';
+          element.style.letterSpacing = "calc(".concat(combWidth, "px - 1ch)");
         }
       } else {
         element = document.createElement('div');
@@ -19925,7 +20042,7 @@ function (_WidgetAnnotationElem) {
     key: "_setTextStyle",
     value: function _setTextStyle(element, font) {
       var style = element.style;
-      style.fontSize = this.data.fontSize + 'px';
+      style.fontSize = "".concat(this.data.fontSize, "px");
       style.direction = this.data.fontDirection < 0 ? 'rtl' : 'ltr';
 
       if (!font) {
@@ -19934,7 +20051,7 @@ function (_WidgetAnnotationElem) {
 
       style.fontWeight = font.black ? font.bold ? '900' : 'bold' : font.bold ? 'bold' : 'normal';
       style.fontStyle = font.italic ? 'italic' : 'normal';
-      var fontFamily = font.loadedName ? '"' + font.loadedName + '", ' : '';
+      var fontFamily = font.loadedName ? "\"".concat(font.loadedName, "\", ") : '';
       var fallbackName = font.fallbackName || 'Helvetica, sans-serif';
       style.fontFamily = fontFamily + fallbackName;
     }
@@ -20056,17 +20173,36 @@ function (_WidgetAnnotationElem4) {
         }
       }
 
-      for (var i = 0, ii = this.data.options.length; i < ii; i++) {
-        var option = this.data.options[i];
-        var optionElement = document.createElement('option');
-        optionElement.textContent = option.displayValue;
-        optionElement.value = option.exportValue;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
 
-        if (this.data.fieldValue.includes(option.displayValue)) {
-          optionElement.setAttribute('selected', true);
+      try {
+        for (var _iterator = this.data.options[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var option = _step.value;
+          var optionElement = document.createElement('option');
+          optionElement.textContent = option.displayValue;
+          optionElement.value = option.exportValue;
+
+          if (this.data.fieldValue.includes(option.displayValue)) {
+            optionElement.setAttribute('selected', true);
+          }
+
+          selectElement.appendChild(optionElement);
         }
-
-        selectElement.appendChild(optionElement);
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator["return"] != null) {
+            _iterator["return"]();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
 
       this.container.appendChild(selectElement);
@@ -20099,7 +20235,7 @@ function (_AnnotationElement4) {
         return this.container;
       }
 
-      var selector = '[data-annotation-id="' + this.data.parentId + '"]';
+      var selector = "[data-annotation-id=\"".concat(this.data.parentId, "\"]");
       var parentElement = this.layer.querySelector(selector);
 
       if (!parentElement) {
@@ -20116,8 +20252,8 @@ function (_AnnotationElement4) {
       });
       var parentLeft = parseFloat(parentElement.style.left);
       var parentWidth = parseFloat(parentElement.style.width);
-      this.container.style.transformOrigin = -(parentLeft + parentWidth) + 'px -' + parentElement.style.top;
-      this.container.style.left = parentLeft + parentWidth + 'px';
+      this.container.style.transformOrigin = "-".concat(parentLeft + parentWidth, "px -").concat(parentElement.style.top);
+      this.container.style.left = "".concat(parentLeft + parentWidth, "px");
       this.container.appendChild(popup.render());
       return this.container;
     }
@@ -20421,20 +20557,37 @@ function (_AnnotationElement9) {
       var width = data.rect[2] - data.rect[0];
       var height = data.rect[3] - data.rect[1];
       var svg = this.svgFactory.create(width, height);
-      var vertices = data.vertices;
       var points = [];
+      var _iteratorNormalCompletion2 = true;
+      var _didIteratorError2 = false;
+      var _iteratorError2 = undefined;
 
-      for (var i = 0, ii = vertices.length; i < ii; i++) {
-        var x = vertices[i].x - data.rect[0];
-        var y = data.rect[3] - vertices[i].y;
-        points.push(x + ',' + y);
+      try {
+        for (var _iterator2 = data.vertices[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+          var coordinate = _step2.value;
+          var x = coordinate.x - data.rect[0];
+          var y = data.rect[3] - coordinate.y;
+          points.push(x + ',' + y);
+        }
+      } catch (err) {
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+            _iterator2["return"]();
+          }
+        } finally {
+          if (_didIteratorError2) {
+            throw _iteratorError2;
+          }
+        }
       }
 
       points = points.join(' ');
-      var borderWidth = data.borderStyle.width;
       var polyline = this.svgFactory.createElement(this.svgElementName);
       polyline.setAttribute('points', points);
-      polyline.setAttribute('stroke-width', borderWidth);
+      polyline.setAttribute('stroke-width', data.borderStyle.width);
       polyline.setAttribute('stroke', 'transparent');
       polyline.setAttribute('fill', 'none');
       svg.appendChild(polyline);
@@ -20521,29 +20674,64 @@ function (_AnnotationElement11) {
       var width = data.rect[2] - data.rect[0];
       var height = data.rect[3] - data.rect[1];
       var svg = this.svgFactory.create(width, height);
-      var inkLists = data.inkLists;
+      var _iteratorNormalCompletion3 = true;
+      var _didIteratorError3 = false;
+      var _iteratorError3 = undefined;
 
-      for (var i = 0, ii = inkLists.length; i < ii; i++) {
-        var inkList = inkLists[i];
-        var points = [];
+      try {
+        for (var _iterator3 = data.inkLists[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          var inkList = _step3.value;
+          var points = [];
+          var _iteratorNormalCompletion4 = true;
+          var _didIteratorError4 = false;
+          var _iteratorError4 = undefined;
 
-        for (var j = 0, jj = inkList.length; j < jj; j++) {
-          var x = inkList[j].x - data.rect[0];
-          var y = data.rect[3] - inkList[j].y;
-          points.push(x + ',' + y);
+          try {
+            for (var _iterator4 = inkList[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+              var coordinate = _step4.value;
+              var x = coordinate.x - data.rect[0];
+              var y = data.rect[3] - coordinate.y;
+              points.push("".concat(x, ",").concat(y));
+            }
+          } catch (err) {
+            _didIteratorError4 = true;
+            _iteratorError4 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+                _iterator4["return"]();
+              }
+            } finally {
+              if (_didIteratorError4) {
+                throw _iteratorError4;
+              }
+            }
+          }
+
+          points = points.join(' ');
+          var polyline = this.svgFactory.createElement(this.svgElementName);
+          polyline.setAttribute('points', points);
+          polyline.setAttribute('stroke-width', data.borderStyle.width);
+          polyline.setAttribute('stroke', 'transparent');
+          polyline.setAttribute('fill', 'none');
+
+          this._createPopup(this.container, polyline, data);
+
+          svg.appendChild(polyline);
         }
-
-        points = points.join(' ');
-        var borderWidth = data.borderStyle.width;
-        var polyline = this.svgFactory.createElement(this.svgElementName);
-        polyline.setAttribute('points', points);
-        polyline.setAttribute('stroke-width', borderWidth);
-        polyline.setAttribute('stroke', 'transparent');
-        polyline.setAttribute('fill', 'none');
-
-        this._createPopup(this.container, polyline, data);
-
-        svg.appendChild(polyline);
+      } catch (err) {
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+            _iterator3["return"]();
+          }
+        } finally {
+          if (_didIteratorError3) {
+            throw _iteratorError3;
+          }
+        }
       }
 
       this.container.append(svg);
@@ -20764,39 +20952,77 @@ function () {
   _createClass(AnnotationLayer, null, [{
     key: "render",
     value: function render(parameters) {
-      for (var i = 0, ii = parameters.annotations.length; i < ii; i++) {
-        var data = parameters.annotations[i];
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
 
-        if (!data) {
-          continue;
+      try {
+        for (var _iterator5 = parameters.annotations[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var data = _step5.value;
+
+          if (!data) {
+            continue;
+          }
+
+          var element = AnnotationElementFactory.create({
+            data: data,
+            layer: parameters.div,
+            page: parameters.page,
+            viewport: parameters.viewport,
+            linkService: parameters.linkService,
+            downloadManager: parameters.downloadManager,
+            imageResourcesPath: parameters.imageResourcesPath || '',
+            renderInteractiveForms: parameters.renderInteractiveForms || false,
+            svgFactory: new _display_utils.DOMSVGFactory()
+          });
+
+          if (element.isRenderable) {
+            parameters.div.appendChild(element.render());
+          }
         }
-
-        var element = AnnotationElementFactory.create({
-          data: data,
-          layer: parameters.div,
-          page: parameters.page,
-          viewport: parameters.viewport,
-          linkService: parameters.linkService,
-          downloadManager: parameters.downloadManager,
-          imageResourcesPath: parameters.imageResourcesPath || '',
-          renderInteractiveForms: parameters.renderInteractiveForms || false,
-          svgFactory: new _display_utils.DOMSVGFactory()
-        });
-
-        if (element.isRenderable) {
-          parameters.div.appendChild(element.render());
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+            _iterator5["return"]();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
         }
       }
     }
   }, {
     key: "update",
     value: function update(parameters) {
-      for (var i = 0, ii = parameters.annotations.length; i < ii; i++) {
-        var data = parameters.annotations[i];
-        var element = parameters.div.querySelector('[data-annotation-id="' + data.id + '"]');
+      var _iteratorNormalCompletion6 = true;
+      var _didIteratorError6 = false;
+      var _iteratorError6 = undefined;
 
-        if (element) {
-          element.style.transform = 'matrix(' + parameters.viewport.transform.join(',') + ')';
+      try {
+        for (var _iterator6 = parameters.annotations[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+          var data = _step6.value;
+          var element = parameters.div.querySelector("[data-annotation-id=\"".concat(data.id, "\"]"));
+
+          if (element) {
+            element.style.transform = "matrix(".concat(parameters.viewport.transform.join(','), ")");
+          }
+        }
+      } catch (err) {
+        _didIteratorError6 = true;
+        _iteratorError6 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+            _iterator6["return"]();
+          }
+        } finally {
+          if (_didIteratorError6) {
+            throw _iteratorError6;
+          }
         }
       }
 
@@ -23288,6 +23514,12 @@ function extractFilenameFromHeader(getResponseHeader) {
 
   if (contentDisposition) {
     var filename = (0, _content_disposition.getFilenameFromContentDispositionHeader)(contentDisposition);
+
+    if (filename.includes('%')) {
+      try {
+        filename = decodeURIComponent(filename);
+      } catch (ex) {}
+    }
 
     if (/\.pdf$/i.test(filename)) {
       return filename;
