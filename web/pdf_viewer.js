@@ -245,8 +245,8 @@ var _pdf_single_page_viewer = __w_pdfjs_require__(18);
 
 var _pdf_viewer = __w_pdfjs_require__(20);
 
-var pdfjsVersion = '2.3.158';
-var pdfjsBuild = '7f3c45b8';
+var pdfjsVersion = '2.3.157';
+var pdfjsBuild = 'e54c324a';
 (0, _ui_utils.getGlobalEventBus)(true);
 
 /***/ }),
@@ -4336,8 +4336,6 @@ function () {
     value: function _indexOfPhrase(text, phrase, fromIndex) {
       fromIndex = fromIndex || 0;
       var phraseRegex = new RegExp(this._escapeRegExp(phrase).replace(/\s/g, '\\s*'));
-      console.log('phraseRegex: ' + phraseRegex);
-      console.log('text: ' + text.slice(fromIndex));
       var indexInSuffix = text.slice(fromIndex).search(phraseRegex);
       return indexInSuffix < 0 ? indexInSuffix : indexInSuffix + fromIndex;
     }
@@ -4350,11 +4348,9 @@ function () {
       var that = this;
       this._pageHighlightMatches[pageIndex] = this._pageHighlightMatches[pageIndex] || {};
       highlights.forEach(function (highlight) {
-        console.log('highlight1: ' + highlight);
         highlight = normalize(highlight.toLowerCase());
         var highlightLen = highlight.length;
         var highlightWOEms = highlight.replace(new RegExp(emOpeningTag, 'g'), '').replace(new RegExp(emClosingTag, 'g'), '');
-        console.log('highlight2: ' + highlight);
         var matchIdx = -highlightLen;
 
         var _loop = function _loop() {
@@ -4364,7 +4360,6 @@ function () {
             return "break";
           }
 
-          console.log('matchIdx: ' + matchIdx);
           var emRegex = new RegExp(emOpeningTag + '(.+?)' + emClosingTag, 'g');
           var emTags = highlight.match(emRegex).map(function (val) {
             return val;
@@ -4434,7 +4429,6 @@ function () {
           entireWord = _this$_state.entireWord,
           phraseSearch = _this$_state.phraseSearch,
           highlights = _this$_state.highlights;
-      console.log('pageIndex: ' + pageIndex);
 
       if (query.length === 0 && !highlights) {
         return;
@@ -4447,9 +4441,6 @@ function () {
 
       if (highlights) {
         this._calculateHighlightMatch(highlights, pageIndex, pageContent);
-
-        console.log('this._pageMatches[pageIndex]: ');
-        console.log(this._pageMatches[pageIndex]);
       } else if (phraseSearch) {
         this._calculatePhraseMatch(query, pageIndex, pageContent, entireWord);
       } else {
@@ -4462,7 +4453,6 @@ function () {
 
       if (this._resumePageIdx === pageIndex) {
         this._resumePageIdx = null;
-        console.log("Next page match...");
 
         this._nextPageMatch();
       }
