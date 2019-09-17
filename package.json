@@ -28,6 +28,6 @@
   "format": "amd",
   "repository": {
     "type": "git",
-    "url": "https://github.com/atykhonov/pdfjs-dist"
+    "url": "git@github.com:atykhonov/pdfjs-dist.git"
   }
 }
